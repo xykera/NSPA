@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWO QA – Shadow DOM</title>
+    <script src="vwo-loader.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <nav class="site-nav">
+        <span class="nav-brand">🧪 VWO QA Site</span>
+        <a href="index.html" onclick="return preserveQueryParams(this)">Home</a>
+        <a href="forms.html" onclick="return preserveQueryParams(this)">Forms</a>
+        <a href="dynamic-forms.html" onclick="return preserveQueryParams(this)">Dynamic Forms</a>
+        <a href="custom-elements.html" onclick="return preserveQueryParams(this)">Custom Elements</a>
+        <a href="shadow-dom.html" onclick="return preserveQueryParams(this)">Shadow DOM</a>
+        <a href="canvas.html" onclick="return preserveQueryParams(this)">Canvas</a>
+        <a href="tables.html" onclick="return preserveQueryParams(this)">Tables</a>
+        <a href="media.html" onclick="return preserveQueryParams(this)">Media</a>
+        <a href="interactive.html" onclick="return preserveQueryParams(this)">Interactive</a>
+        <a href="dom-events.html" onclick="return preserveQueryParams(this)">DOM Events</a>
+        <a href="storage.html" onclick="return preserveQueryParams(this)">Storage</a>
+        <a href="ajax.html" onclick="return preserveQueryParams(this)">AJAX</a>
+        <a href="accessibility.html" onclick="return preserveQueryParams(this)">Accessibility</a>
+    </nav>
+
+    <div class="page-header">
+        <h1>Shadow DOM</h1>
+        <p>Open and closed shadow roots, slots, encapsulated styles, and events crossing shadow boundaries.</p>
+    </div>
+
+    <main class="content">
+
+        <!-- Open Shadow DOM -->
+        <div class="section">
+            <h2>Open Shadow DOM</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">
+                The host element below has an open shadow root. Its internals are accessible via
+                <code>element.shadowRoot</code>.
+            </p>
+            <div id="open-shadow-host" data-testid="open-shadow-host"></div>
+            <div class="output-box mt-8" id="open-shadow-log" style="min-height:40px"></div>
+        </div>
+
+        <!-- Closed Shadow DOM -->
+        <div class="section">
+            <h2>Closed Shadow DOM</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">
+                This element has a closed shadow root. <code>element.shadowRoot</code> returns <code>null</code>.
+            </p>
+            <div id="closed-shadow-host" data-testid="closed-shadow-host"></div>
+            <div class="output-box mt-8" id="closed-shadow-log" style="min-height:40px"></div>
+        </div>
+
+        <!-- Shadow DOM with Slots -->
+        <div class="section">
+            <h2>Shadow DOM with Slots</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">
+                Slot-based content projection — light DOM content is projected into shadow DOM slots.
+            </p>
+            <slotted-card id="slotted-card-1" data-testid="slotted-card">
+                <span slot="title">VWO Analytics Dashboard</span>
+                <span slot="body">Track conversions, heatmaps, and A/B test results all in one place.</span>
+                <span slot="footer">
+                    <button class="btn btn-primary btn-sm" id="slotted-btn-1">Learn More</button>
+                </span>
+            </slotted-card>
+        </div>
+
+        <!-- Shadow DOM with Internal Form -->
+        <div class="section">
+            <h2>Shadow DOM with Internal Form</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">
+                A form entirely encapsulated inside a shadow root.
+            </p>
+            <shadow-form id="shadow-form-1" data-testid="shadow-form"></shadow-form>
+            <div class="output-box mt-8" id="shadow-form-log" style="min-height:40px"></div>
+        </div>
+
+        <!-- Shadow DOM Event Retargeting -->
+        <div class="section">
+            <h2>Shadow DOM Event Retargeting</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">
+                Events that cross the shadow boundary are retargeted. The <code>event.target</code> outside the shadow
+                root points to the host element.
+            </p>
+            <div id="event-retarget-host" data-testid="event-retarget-host"></div>
+            <div class="output-box mt-8" id="event-retarget-log" style="min-height:40px"></div>
+        </div>
+
+        <!-- Nested Shadow DOM -->
+        <div class="section">
+            <h2>Nested Shadow DOM</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">
+                Shadow DOM within shadow DOM — two levels of encapsulation.
+            </p>
+            <nested-shadow id="nested-shadow-1" data-testid="nested-shadow"></nested-shadow>
+        </div>
+
+        <!-- Shadow DOM CSS Encapsulation -->
+        <div class="section">
+            <h2>CSS Encapsulation Demo</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">
+                Styles inside shadow DOM don't leak out, and global styles don't leak in (except inherited properties).
+            </p>
+            <p style="color:var(--primary);font-size:14px">This paragraph uses the page's primary color.</p>
+            <style-encap-demo id="style-encap-1" data-testid="style-encap"></style-encap-demo>
+            <p style="color:var(--primary);font-size:14px">This paragraph also uses the page's primary color (shadow
+                styles didn't leak).</p>
+        </div>
+
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+        // ===== Open Shadow DOM =====
+        const openHost = document.getElementById('open-shadow-host');
+        const openShadow = openHost.attachShadow({ mode: 'open' });
+        openShadow.innerHTML = `
+  <style>
+    .shadow-box { background: #eff6ff; border: 2px solid #3b82f6; border-radius: 8px; padding: 16px; font-family: Arial, sans-serif; }
+    h3 { color: #1d4ed8; margin-bottom: 8px; font-size: 15px; }
+    button { background: #3b82f6; color: #fff; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+    button:hover { background: #2563eb; }
+    p { font-size: 13px; color: #475569; }
+  </style>
+  <div class="shadow-box">
+    <h3>🔵 Open Shadow Root</h3>
+    <p>This content lives inside an open shadow root. You can access it via <code>element.shadowRoot</code>.</p>
+    <button id="shadow-open-btn">Click Me (inside shadow)</button>
+    <p id="shadow-open-output" style="margin-top:8px"></p>
+  </div>`;
+
+        openShadow.getElementById('shadow-open-btn').addEventListener('click', function () {
+            openShadow.getElementById('shadow-open-output').textContent = 'Button clicked at ' + new Date().toLocaleTimeString();
+            logToBox('open-shadow-log', 'Click event fired inside open shadow DOM', 'success');
+        });
+
+        // Verify accessibility from outside
+        logToBox('open-shadow-log', 'openHost.shadowRoot is: ' + (openHost.shadowRoot ? 'accessible ✓' : 'null'), 'info');
+
+        // ===== Closed Shadow DOM =====
+        const closedHost = document.getElementById('closed-shadow-host');
+        const closedShadow = closedHost.attachShadow({ mode: 'closed' });
+        closedShadow.innerHTML = `
+  <style>
+    .shadow-box { background: #fef3c7; border: 2px solid #d97706; border-radius: 8px; padding: 16px; font-family: Arial, sans-serif; }
+    h3 { color: #92400e; margin-bottom: 8px; font-size: 15px; }
+    button { background: #d97706; color: #fff; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+    p { font-size: 13px; color: #78350f; }
+  </style>
+  <div class="shadow-box">
+    <h3>🟡 Closed Shadow Root</h3>
+    <p>This content lives inside a closed shadow root. <code>element.shadowRoot</code> returns <code>null</code>.</p>
+    <button id="shadow-closed-btn">Click Me (inside closed shadow)</button>
+    <p id="shadow-closed-output" style="margin-top:8px"></p>
+  </div>`;
+
+        closedShadow.getElementById('shadow-closed-btn').addEventListener('click', function () {
+            closedShadow.getElementById('shadow-closed-output').textContent = 'Clicked at ' + new Date().toLocaleTimeString();
+            logToBox('closed-shadow-log', 'Click event fired inside closed shadow DOM', 'success');
+        });
+
+        logToBox('closed-shadow-log', 'closedHost.shadowRoot is: ' + (closedHost.shadowRoot === null ? 'null (inaccessible) ✓' : 'accessible'), 'info');
+
+        // ===== Slotted Card Web Component =====
+        class SlottedCard extends HTMLElement {
+            connectedCallback() {
+                const shadow = this.attachShadow({ mode: 'open' });
+                shadow.innerHTML = `
+      <style>
+        :host { display: block; }
+        .card { border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; max-width: 400px; font-family: Arial, sans-serif; }
+        .card-title { background: #1e293b; color: #fff; padding: 12px 16px; font-size: 15px; font-weight: bold; }
+        .card-body { padding: 14px 16px; font-size: 14px; color: #475569; }
+        .card-footer { padding: 10px 16px; background: #f8fafc; border-top: 1px solid #e2e8f0; }
+      </style>
+      <div class="card">
+        <div class="card-title"><slot name="title">Card Title</slot></div>
+        <div class="card-body"><slot name="body">Card body content.</slot></div>
+        <div class="card-footer"><slot name="footer"></slot></div>
+      </div>`;
+            }
+        }
+        customElements.define('slotted-card', SlottedCard);
+
+        // ===== Shadow Form Web Component =====
+        class ShadowForm extends HTMLElement {
+            connectedCallback() {
+                const shadow = this.attachShadow({ mode: 'open' });
+                shadow.innerHTML = `
+      <style>
+        :host { display: block; }
+        form { background: #f0fdf4; border: 2px solid #16a34a; border-radius: 8px; padding: 16px; font-family: Arial, sans-serif; }
+        h3 { color: #15803d; margin-bottom: 12px; font-size: 15px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        input, textarea { width: 100%; padding: 7px 10px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 13px; margin-bottom: 10px; box-sizing: border-box; }
+        button { background: #16a34a; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+        #result { margin-top: 10px; font-size: 12px; color: #15803d; font-family: monospace; white-space: pre; }
+      </style>
+      <form id="inner-form">
+        <h3>🟢 Form inside Shadow DOM</h3>
+        <label for="sf-name">Name</label>
+        <input type="text" id="sf-name" placeholder="Your name" data-testid="shadow-form-name">
+        <label for="sf-email">Email</label>
+        <input type="email" id="sf-email" placeholder="email@example.com" data-testid="shadow-form-email">
+        <label for="sf-msg">Message</label>
+        <textarea id="sf-msg" rows="2" placeholder="Message…" data-testid="shadow-form-msg"></textarea>
+        <button type="submit">Submit (Shadow Form)</button>
+        <div id="result"></div>
+      </form>`;
+                shadow.getElementById('inner-form').addEventListener('submit', e => {
+                    e.preventDefault();
+                    const data = {
+                        name: shadow.getElementById('sf-name').value,
+                        email: shadow.getElementById('sf-email').value,
+                        message: shadow.getElementById('sf-msg').value
+                    };
+                    shadow.getElementById('result').textContent = JSON.stringify(data, null, 2);
+                    logToBox('shadow-form-log', 'Shadow form submitted: ' + JSON.stringify(data), 'success');
+                });
+            }
+        }
+        customElements.define('shadow-form', ShadowForm);
+
+        // ===== Event Retargeting =====
+        const retargetHost = document.getElementById('event-retarget-host');
+        const retargetShadow = retargetHost.attachShadow({ mode: 'open' });
+        retargetShadow.innerHTML = `
+  <style>
+    div { background: #fdf4ff; border: 2px solid #a855f7; border-radius: 8px; padding: 16px; font-family: Arial, sans-serif; }
+    h3 { color: #7e22ce; margin-bottom: 8px; font-size: 15px; }
+    button { background: #a855f7; color: #fff; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+    p { font-size: 13px; color: #6b21a8; margin-top: 8px; }
+  </style>
+  <div>
+    <h3>🟣 Event Retargeting Demo</h3>
+    <button id="retarget-btn">Click to fire event</button>
+    <p>Click the button and observe how the event target changes outside the shadow boundary.</p>
+  </div>`;
+
+        retargetShadow.getElementById('retarget-btn').addEventListener('click', function (e) {
+            logToBox('event-retarget-log', 'Inside shadow: event.target = ' + e.target.tagName + '#' + e.target.id, 'info');
+        });
+
+        retargetHost.addEventListener('click', function (e) {
+            logToBox('event-retarget-log', 'Outside shadow: event.target = ' + e.target.tagName + '#' + e.target.id + ' (retargeted to host)', 'success');
+        });
+
+        // ===== Nested Shadow DOM =====
+        class NestedShadow extends HTMLElement {
+            connectedCallback() {
+                const outerShadow = this.attachShadow({ mode: 'open' });
+                outerShadow.innerHTML = `
+      <style>
+        :host { display: block; }
+        .outer { background: #fff7ed; border: 2px solid #f97316; border-radius: 8px; padding: 16px; font-family: Arial, sans-serif; }
+        h3 { color: #c2410c; font-size: 15px; margin-bottom: 8px; }
+        #inner-host { margin-top: 12px; }
+      </style>
+      <div class="outer">
+        <h3>🟠 Outer Shadow Root (Level 1)</h3>
+        <p style="font-size:13px;color:#7c2d12">This is the outer shadow DOM.</p>
+        <div id="inner-host"></div>
+      </div>`;
+                const innerHost = outerShadow.getElementById('inner-host');
+                const innerShadow = innerHost.attachShadow({ mode: 'open' });
+                innerShadow.innerHTML = `
+      <style>
+        :host { display: block; }
+        .inner { background: #fef9c3; border: 2px dashed #ca8a04; border-radius: 6px; padding: 12px; font-family: Arial, sans-serif; }
+        h4 { color: #92400e; font-size: 14px; margin-bottom: 6px; }
+        button { background: #ca8a04; color: #fff; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+      </style>
+      <div class="inner">
+        <h4>🟡 Inner Shadow Root (Level 2)</h4>
+        <p style="font-size:12px;color:#78350f">Nested shadow DOM — two levels of encapsulation.</p>
+        <button id="nested-btn">Click (Level 2)</button>
+      </div>`;
+                innerShadow.getElementById('nested-btn').addEventListener('click', () => {
+                    alert('Button inside nested shadow DOM (Level 2) clicked!');
+                });
+            }
+        }
+        customElements.define('nested-shadow', NestedShadow);
+
+        // ===== Style Encapsulation Demo =====
+        class StyleEncapDemo extends HTMLElement {
+            connectedCallback() {
+                const shadow = this.attachShadow({ mode: 'open' });
+                shadow.innerHTML = `
+      <style>
+        p { color: #dc2626 !important; font-size: 14px; font-weight: bold; }
+        .shadow-container { background: #fee2e2; border: 2px solid #dc2626; border-radius: 8px; padding: 14px; font-family: Arial, sans-serif; }
+        h3 { color: #991b1b; font-size: 14px; margin-bottom: 8px; }
+      </style>
+      <div class="shadow-container">
+        <h3>🔴 Inside Shadow DOM</h3>
+        <p>This paragraph is red (shadow-scoped style).</p>
+        <p>Global styles don't affect this content (except inherited).</p>
+      </div>`;
+            }
+        }
+        customElements.define('style-encap-demo', StyleEncapDemo);
+    </script>
+</body>
+
+</html>

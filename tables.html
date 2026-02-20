@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWO QA – Tables</title>
+    <script src="vwo-loader.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <nav class="site-nav">
+        <span class="nav-brand">🧪 VWO QA Site</span>
+        <a href="index.html" onclick="return preserveQueryParams(this)">Home</a>
+        <a href="forms.html" onclick="return preserveQueryParams(this)">Forms</a>
+        <a href="dynamic-forms.html" onclick="return preserveQueryParams(this)">Dynamic Forms</a>
+        <a href="custom-elements.html" onclick="return preserveQueryParams(this)">Custom Elements</a>
+        <a href="shadow-dom.html" onclick="return preserveQueryParams(this)">Shadow DOM</a>
+        <a href="canvas.html" onclick="return preserveQueryParams(this)">Canvas</a>
+        <a href="tables.html" onclick="return preserveQueryParams(this)">Tables</a>
+        <a href="media.html" onclick="return preserveQueryParams(this)">Media</a>
+        <a href="interactive.html" onclick="return preserveQueryParams(this)">Interactive</a>
+        <a href="dom-events.html" onclick="return preserveQueryParams(this)">DOM Events</a>
+        <a href="storage.html" onclick="return preserveQueryParams(this)">Storage</a>
+        <a href="ajax.html" onclick="return preserveQueryParams(this)">AJAX</a>
+        <a href="accessibility.html" onclick="return preserveQueryParams(this)">Accessibility</a>
+    </nav>
+
+    <div class="page-header">
+        <h1>Tables</h1>
+        <p>Basic, sortable, paginated, editable, nested tables, and tables with row selection.</p>
+    </div>
+
+    <main class="content">
+
+        <!-- Basic Table -->
+        <div class="section">
+            <h2>Basic HTML Table</h2>
+            <table id="basic-table" data-testid="basic-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Alice Johnson</td>
+                        <td>alice@example.com</td>
+                        <td>Admin</td>
+                        <td><span class="badge badge-success">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Bob Smith</td>
+                        <td>bob@example.com</td>
+                        <td>Editor</td>
+                        <td><span class="badge badge-success">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Carol White</td>
+                        <td>carol@example.com</td>
+                        <td>Viewer</td>
+                        <td><span class="badge badge-danger">Inactive</span></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>David Brown</td>
+                        <td>david@example.com</td>
+                        <td>Editor</td>
+                        <td><span class="badge badge-warning">Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Eve Davis</td>
+                        <td>eve@example.com</td>
+                        <td>Admin</td>
+                        <td><span class="badge badge-success">Active</span></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5" style="color:var(--text-muted);font-size:12px">5 records total</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Sortable Table -->
+        <div class="section">
+            <h2>Sortable Table <span class="badge badge-primary" style="font-size:11px">Click headers to sort</span>
+            </h2>
+            <table id="sortable-table" data-testid="sortable-table">
+                <thead>
+                    <tr>
+                        <th data-col="id" data-type="number">ID <span class="sort-icon">↕</span></th>
+                        <th data-col="name" data-type="string">Name <span class="sort-icon">↕</span></th>
+                        <th data-col="score" data-type="number">Score <span class="sort-icon">↕</span></th>
+                        <th data-col="date" data-type="date">Date <span class="sort-icon">↕</span></th>
+                        <th data-col="status" data-type="string">Status <span class="sort-icon">↕</span></th>
+                    </tr>
+                </thead>
+                <tbody id="sortable-tbody"></tbody>
+            </table>
+        </div>
+
+        <!-- Paginated Table -->
+        <div class="section">
+            <h2>Paginated Table</h2>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                <div>
+                    <label style="font-size:13px">Rows per page:
+                        <select id="page-size"
+                            style="margin-left:6px;padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:13px">
+                            <option value="5" selected>5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                        </select>
+                    </label>
+                </div>
+                <input type="text" id="table-search" placeholder="Search…"
+                    style="padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-size:13px;width:200px"
+                    data-testid="table-search">
+            </div>
+            <table id="paginated-table" data-testid="paginated-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                    </tr>
+                </thead>
+                <tbody id="paginated-tbody"></tbody>
+            </table>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+                <span id="page-info" style="font-size:13px;color:var(--text-muted)"></span>
+                <div class="btn-group" style="margin:0" id="pagination-controls"></div>
+            </div>
+        </div>
+
+        <!-- Select All Table -->
+        <div class="section">
+            <h2>Table with Row Selection</h2>
+            <div class="btn-group" style="margin-bottom:10px">
+                <button class="btn btn-danger btn-sm" id="delete-selected-btn" onclick="deleteSelected()">Delete
+                    Selected</button>
+                <button class="btn btn-secondary btn-sm" onclick="exportSelected()">Export Selected</button>
+            </div>
+            <table id="select-table" data-testid="select-table">
+                <thead>
+                    <tr>
+                        <th style="width:40px"><input type="checkbox" id="select-all-chk" data-testid="select-all"></th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Salary</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="select-tbody"></tbody>
+            </table>
+            <div id="select-result" class="output-box mt-8" style="display:none"></div>
+        </div>
+
+        <!-- Editable Table -->
+        <div class="section">
+            <h2>Editable Table <span class="badge badge-primary" style="font-size:11px">Click cells to edit</span></h2>
+            <table id="editable-table" data-testid="editable-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="editable-tbody"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" style="text-align:right;font-weight:600;padding:10px 12px">Grand Total:</td>
+                        <td id="grand-total" style="font-weight:600;padding:10px 12px">$0.00</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <button class="btn btn-secondary btn-sm mt-8" onclick="addEditableRow()">+ Add Row</button>
+        </div>
+
+        <!-- Nested Table -->
+        <div class="section">
+            <h2>Nested Table</h2>
+            <table id="nested-table" data-testid="nested-table" style="border:1px solid var(--border)">
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Head</th>
+                        <th>Members</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Engineering</td>
+                        <td>Alice Johnson</td>
+                        <td>
+                            <table style="width:100%;font-size:12px">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                </tr>
+                                <tr>
+                                    <td>Bob</td>
+                                    <td>Frontend</td>
+                                </tr>
+                                <tr>
+                                    <td>Carol</td>
+                                    <td>Backend</td>
+                                </tr>
+                                <tr>
+                                    <td>Dave</td>
+                                    <td>DevOps</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Marketing</td>
+                        <td>Eve Davis</td>
+                        <td>
+                            <table style="width:100%;font-size:12px">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                </tr>
+                                <tr>
+                                    <td>Frank</td>
+                                    <td>SEO</td>
+                                </tr>
+                                <tr>
+                                    <td>Grace</td>
+                                    <td>Content</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+        // ===== Sortable Table =====
+        const sortableData = [
+            { id: 1, name: 'Alice', score: 92, date: '2024-03-15', status: 'Active' },
+            { id: 2, name: 'Bob', score: 78, date: '2024-01-22', status: 'Inactive' },
+            { id: 3, name: 'Carol', score: 85, date: '2024-05-10', status: 'Active' },
+            { id: 4, name: 'David', score: 61, date: '2023-11-30', status: 'Pending' },
+            { id: 5, name: 'Eve', score: 97, date: '2024-06-01', status: 'Active' },
+            { id: 6, name: 'Frank', score: 73, date: '2024-02-14', status: 'Inactive' },
+        ];
+        let sortCol = null, sortDir = 1;
+
+        function renderSortable(data) {
+            const tbody = document.getElementById('sortable-tbody');
+            tbody.innerHTML = data.map(r => `
+    <tr>
+      <td>${r.id}</td>
+      <td>${r.name}</td>
+      <td>${r.score}</td>
+      <td>${r.date}</td>
+      <td><span class="badge badge-${r.status === 'Active' ? 'success' : r.status === 'Inactive' ? 'danger' : 'warning'}">${r.status}</span></td>
+    </tr>`).join('');
+        }
+        renderSortable(sortableData);
+
+        document.getElementById('sortable-table').querySelectorAll('th[data-col]').forEach(th => {
+            th.style.cursor = 'pointer';
+            th.addEventListener('click', function () {
+                const col = this.dataset.col;
+                const type = this.dataset.type;
+                if (sortCol === col) sortDir *= -1; else { sortCol = col; sortDir = 1; }
+                document.querySelectorAll('#sortable-table .sort-icon').forEach(i => i.textContent = '↕');
+                this.querySelector('.sort-icon').textContent = sortDir === 1 ? '↑' : '↓';
+                const sorted = [...sortableData].sort((a, b) => {
+                    let va = a[col], vb = b[col];
+                    if (type === 'number') return (va - vb) * sortDir;
+                    if (type === 'date') return (new Date(va) - new Date(vb)) * sortDir;
+                    return va.localeCompare(vb) * sortDir;
+                });
+                renderSortable(sorted);
+            });
+        });
+
+        // ===== Paginated Table =====
+        const products = Array.from({ length: 50 }, (_, i) => ({
+            id: i + 1,
+            product: ['Widget A', 'Widget B', 'Gadget X', 'Tool Pro', 'Device Z', 'Component Y', 'Module M', 'Unit N', 'Part P', 'Item Q'][i % 10] + ' ' + (i + 1),
+            category: ['Electronics', 'Tools', 'Gadgets', 'Parts', 'Modules'][i % 5],
+            price: (Math.random() * 200 + 10).toFixed(2),
+            stock: Math.floor(Math.random() * 500)
+        }));
+
+        let currentPage = 1, filteredProducts = [...products];
+
+        function renderPaginated() {
+            const size = parseInt(document.getElementById('page-size').value);
+            const start = (currentPage - 1) * size;
+            const pageData = filteredProducts.slice(start, start + size);
+            document.getElementById('paginated-tbody').innerHTML = pageData.map(p =>
+                `<tr><td>${p.id}</td><td>${p.product}</td><td>${p.category}</td><td>$${p.price}</td><td>${p.stock}</td></tr>`
+            ).join('');
+            const total = filteredProducts.length;
+            const pages = Math.ceil(total / size);
+            document.getElementById('page-info').textContent = `Showing ${start + 1}–${Math.min(start + size, total)} of ${total}`;
+            const ctrl = document.getElementById('pagination-controls');
+            ctrl.innerHTML = '';
+            const addBtn = (label, page, disabled) => {
+                const b = document.createElement('button');
+                b.className = 'btn btn-secondary btn-sm' + (page === currentPage ? ' btn-primary' : '');
+                b.textContent = label; b.disabled = disabled;
+                b.addEventListener('click', () => { currentPage = page; renderPaginated(); });
+                ctrl.appendChild(b);
+            };
+            addBtn('«', 1, currentPage === 1);
+            addBtn('‹', currentPage - 1, currentPage === 1);
+            const start_p = Math.max(1, currentPage - 2), end_p = Math.min(pages, currentPage + 2);
+            for (let p = start_p; p <= end_p; p++) addBtn(p, p, false);
+            addBtn('›', currentPage + 1, currentPage === pages);
+            addBtn('»', pages, currentPage === pages);
+        }
+        renderPaginated();
+
+        document.getElementById('page-size').addEventListener('change', () => { currentPage = 1; renderPaginated(); });
+        document.getElementById('table-search').addEventListener('input', function () {
+            const q = this.value.toLowerCase();
+            filteredProducts = products.filter(p => p.product.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+            currentPage = 1; renderPaginated();
+        });
+
+        // ===== Select Table =====
+        const employees = [
+            { id: 1, name: 'Alice Johnson', dept: 'Engineering', salary: '$95,000' },
+            { id: 2, name: 'Bob Smith', dept: 'Marketing', salary: '$72,000' },
+            { id: 3, name: 'Carol White', dept: 'Engineering', salary: '$88,000' },
+            { id: 4, name: 'David Brown', dept: 'HR', salary: '$65,000' },
+            { id: 5, name: 'Eve Davis', dept: 'Finance', salary: '$82,000' },
+        ];
+
+        function renderSelectTable() {
+            document.getElementById('select-tbody').innerHTML = employees.map(e => `
+    <tr id="emp-row-${e.id}">
+      <td><input type="checkbox" class="row-chk" data-id="${e.id}" data-testid="row-chk-${e.id}"></td>
+      <td>${e.name}</td>
+      <td>${e.dept}</td>
+      <td>${e.salary}</td>
+      <td>
+        <button class="btn btn-secondary btn-sm" onclick="editRow(${e.id})">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteRow(${e.id})">Delete</button>
+      </td>
+    </tr>`).join('');
+        }
+        renderSelectTable();
+
+        document.getElementById('select-all-chk').addEventListener('change', function () {
+            document.querySelectorAll('.row-chk').forEach(c => c.checked = this.checked);
+        });
+
+        function getSelected() {
+            return [...document.querySelectorAll('.row-chk:checked')].map(c => parseInt(c.dataset.id));
+        }
+
+        function deleteSelected() {
+            const ids = getSelected();
+            if (!ids.length) { alert('No rows selected.'); return; }
+            ids.forEach(id => employees.splice(employees.findIndex(e => e.id === id), 1));
+            renderSelectTable();
+            document.getElementById('select-all-chk').checked = false;
+            const res = document.getElementById('select-result');
+            res.style.display = 'block';
+            res.textContent = 'Deleted IDs: ' + ids.join(', ');
+        }
+
+        function exportSelected() {
+            const ids = getSelected();
+            const data = ids.length ? employees.filter(e => ids.includes(e.id)) : employees;
+            const res = document.getElementById('select-result');
+            res.style.display = 'block';
+            res.textContent = JSON.stringify(data, null, 2);
+        }
+
+        function deleteRow(id) {
+            employees.splice(employees.findIndex(e => e.id === id), 1);
+            renderSelectTable();
+        }
+
+        function editRow(id) {
+            const emp = employees.find(e => e.id === id);
+            const name = prompt('Edit name:', emp.name);
+            if (name) { emp.name = name; renderSelectTable(); }
+        }
+
+        // ===== Editable Table =====
+        let editableRows = [
+            { id: 1, product: 'Widget A', qty: 2, price: 29.99 },
+            { id: 2, product: 'Gadget B', qty: 1, price: 59.99 },
+            { id: 3, product: 'Tool C', qty: 5, price: 9.99 },
+        ];
+        let nextEditId = 4;
+
+        function renderEditable() {
+            const tbody = document.getElementById('editable-tbody');
+            tbody.innerHTML = editableRows.map(r => `
+    <tr id="edit-row-${r.id}">
+      <td contenteditable="true" data-field="product" data-id="${r.id}" class="editable-cell" style="outline:none">${r.product}</td>
+      <td contenteditable="true" data-field="qty" data-id="${r.id}" class="editable-cell" style="outline:none">${r.qty}</td>
+      <td contenteditable="true" data-field="price" data-id="${r.id}" class="editable-cell" style="outline:none">${r.price.toFixed(2)}</td>
+      <td>$${(r.qty * r.price).toFixed(2)}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteEditRow(${r.id})">✕</button></td>
+    </tr>`).join('');
+            updateGrandTotal();
+            document.querySelectorAll('.editable-cell').forEach(cell => {
+                cell.addEventListener('focus', function () { this.style.background = '#eff6ff'; this.style.outline = '2px solid var(--primary)'; });
+                cell.addEventListener('blur', function () {
+                    this.style.background = ''; this.style.outline = 'none';
+                    const id = parseInt(this.dataset.id), field = this.dataset.field;
+                    const row = editableRows.find(r => r.id === id);
+                    if (field === 'qty') row.qty = parseInt(this.textContent) || 0;
+                    else if (field === 'price') row.price = parseFloat(this.textContent) || 0;
+                    else row.product = this.textContent;
+                    renderEditable();
+                });
+            });
+        }
+
+        function updateGrandTotal() {
+            const total = editableRows.reduce((s, r) => s + r.qty * r.price, 0);
+            document.getElementById('grand-total').textContent = '$' + total.toFixed(2);
+        }
+
+        function deleteEditRow(id) {
+            editableRows = editableRows.filter(r => r.id !== id);
+            renderEditable();
+        }
+
+        function addEditableRow() {
+            editableRows.push({ id: nextEditId++, product: 'New Item', qty: 1, price: 0 });
+            renderEditable();
+        }
+
+        renderEditable();
+    </script>
+</body>
+
+</html>

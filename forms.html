@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWO QA – Standard Forms</title>
+    <meta name="description" content="Standard HTML5 form elements for QA testing.">
+    <script src="vwo-loader.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <nav class="site-nav">
+        <span class="nav-brand">🧪 VWO QA Site</span>
+        <a href="index.html" onclick="return preserveQueryParams(this)">Home</a>
+        <a href="forms.html" onclick="return preserveQueryParams(this)">Forms</a>
+        <a href="dynamic-forms.html" onclick="return preserveQueryParams(this)">Dynamic Forms</a>
+        <a href="custom-elements.html" onclick="return preserveQueryParams(this)">Custom Elements</a>
+        <a href="shadow-dom.html" onclick="return preserveQueryParams(this)">Shadow DOM</a>
+        <a href="canvas.html" onclick="return preserveQueryParams(this)">Canvas</a>
+        <a href="tables.html" onclick="return preserveQueryParams(this)">Tables</a>
+        <a href="media.html" onclick="return preserveQueryParams(this)">Media</a>
+        <a href="interactive.html" onclick="return preserveQueryParams(this)">Interactive</a>
+        <a href="dom-events.html" onclick="return preserveQueryParams(this)">DOM Events</a>
+        <a href="storage.html" onclick="return preserveQueryParams(this)">Storage</a>
+        <a href="ajax.html" onclick="return preserveQueryParams(this)">AJAX</a>
+        <a href="accessibility.html" onclick="return preserveQueryParams(this)">Accessibility</a>
+    </nav>
+
+    <div class="page-header">
+        <h1>Standard Forms</h1>
+        <p>All HTML5 input types, validation attributes, fieldsets, and form controls.</p>
+    </div>
+
+    <main class="content">
+
+        <!-- Text Inputs -->
+        <div class="section">
+            <h2>Text Input Types</h2>
+            <form id="text-inputs-form" novalidate>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inp-text">Text</label>
+                        <input type="text" id="inp-text" name="text" placeholder="Enter text" data-testid="text-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-email">Email</label>
+                        <input type="email" id="inp-email" name="email" placeholder="user@example.com"
+                            data-testid="email-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-password">Password</label>
+                        <input type="password" id="inp-password" name="password" placeholder="••••••••"
+                            data-testid="password-input">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inp-number">Number</label>
+                        <input type="number" id="inp-number" name="number" min="0" max="100" step="5"
+                            placeholder="0–100" data-testid="number-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-tel">Telephone</label>
+                        <input type="tel" id="inp-tel" name="tel" placeholder="+1 (555) 000-0000"
+                            data-testid="tel-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-url">URL</label>
+                        <input type="url" id="inp-url" name="url" placeholder="https://example.com"
+                            data-testid="url-input">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inp-search">Search</label>
+                        <input type="search" id="inp-search" name="search" placeholder="Search…"
+                            data-testid="search-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-hidden">Hidden (value: secret123)</label>
+                        <input type="hidden" id="inp-hidden" name="hidden_field" value="secret123">
+                        <span class="form-hint">Hidden input – not visible but present in DOM</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Date & Time -->
+        <div class="section">
+            <h2>Date &amp; Time Inputs</h2>
+            <form id="datetime-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inp-date">Date</label>
+                        <input type="date" id="inp-date" name="date" data-testid="date-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-time">Time</label>
+                        <input type="time" id="inp-time" name="time" data-testid="time-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-datetime">Datetime-local</label>
+                        <input type="datetime-local" id="inp-datetime" name="datetime" data-testid="datetime-input">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inp-month">Month</label>
+                        <input type="month" id="inp-month" name="month" data-testid="month-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-week">Week</label>
+                        <input type="week" id="inp-week" name="week" data-testid="week-input">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Range & Color -->
+        <div class="section">
+            <h2>Range &amp; Color</h2>
+            <form id="range-color-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inp-range">Range: <span id="range-val">50</span></label>
+                        <input type="range" id="inp-range" name="range" min="0" max="100" value="50"
+                            oninput="document.getElementById('range-val').textContent=this.value"
+                            data-testid="range-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-color">Color Picker</label>
+                        <input type="color" id="inp-color" name="color" value="#2563eb" data-testid="color-input">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Textarea -->
+        <div class="section">
+            <h2>Textarea</h2>
+            <form id="textarea-form">
+                <div class="form-group">
+                    <label for="inp-textarea">Message</label>
+                    <textarea id="inp-textarea" name="message" rows="4" placeholder="Enter your message here…"
+                        data-testid="textarea-input" maxlength="500"></textarea>
+                    <span class="form-hint">Max 500 characters. <span id="char-count">0</span>/500</span>
+                </div>
+            </form>
+        </div>
+
+        <!-- Select & Datalist -->
+        <div class="section">
+            <h2>Select &amp; Datalist</h2>
+            <form id="select-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inp-select">Single Select</label>
+                        <select id="inp-select" name="country" data-testid="select-input">
+                            <option value="">-- Select Country --</option>
+                            <optgroup label="Asia">
+                                <option value="in">India</option>
+                                <option value="cn">China</option>
+                                <option value="jp">Japan</option>
+                            </optgroup>
+                            <optgroup label="Europe">
+                                <option value="uk">United Kingdom</option>
+                                <option value="de">Germany</option>
+                                <option value="fr">France</option>
+                            </optgroup>
+                            <optgroup label="Americas">
+                                <option value="us">United States</option>
+                                <option value="ca">Canada</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-multiselect">Multi Select (hold Ctrl)</label>
+                        <select id="inp-multiselect" name="skills" multiple size="5" data-testid="multiselect-input">
+                            <option value="html">HTML</option>
+                            <option value="css">CSS</option>
+                            <option value="js">JavaScript</option>
+                            <option value="py">Python</option>
+                            <option value="java">Java</option>
+                            <option value="ts">TypeScript</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-datalist">Datalist (autocomplete)</label>
+                        <input list="browsers-list" id="inp-datalist" name="browser" placeholder="Type a browser…"
+                            data-testid="datalist-input">
+                        <datalist id="browsers-list">
+                            <option value="Chrome">
+                            <option value="Firefox">
+                            <option value="Safari">
+                            <option value="Edge">
+                            <option value="Opera">
+                            <option value="Brave">
+                        </datalist>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Checkboxes & Radios -->
+        <div class="section">
+            <h2>Checkboxes &amp; Radio Buttons</h2>
+            <form id="check-radio-form">
+                <div class="grid-2">
+                    <div>
+                        <h3>Checkboxes</h3>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="chk-1" name="features" value="analytics"
+                                    data-testid="checkbox-analytics"> Analytics</label>
+                        </div>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="chk-2" name="features" value="heatmaps" checked
+                                    data-testid="checkbox-heatmaps"> Heatmaps</label>
+                        </div>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="chk-3" name="features" value="recordings"
+                                    data-testid="checkbox-recordings"> Session Recordings</label>
+                        </div>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="chk-indeterminate" name="features" value="ab"
+                                    data-testid="checkbox-indeterminate"> A/B Testing (indeterminate)</label>
+                        </div>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="chk-disabled" name="features" value="disabled" disabled
+                                    data-testid="checkbox-disabled"> Disabled Option</label>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Radio Buttons</h3>
+                        <div class="form-group">
+                            <label><input type="radio" id="rad-1" name="plan" value="free" data-testid="radio-free">
+                                Free Plan</label>
+                        </div>
+                        <div class="form-group">
+                            <label><input type="radio" id="rad-2" name="plan" value="growth" checked
+                                    data-testid="radio-growth"> Growth Plan</label>
+                        </div>
+                        <div class="form-group">
+                            <label><input type="radio" id="rad-3" name="plan" value="enterprise"
+                                    data-testid="radio-enterprise"> Enterprise Plan</label>
+                        </div>
+                        <div class="form-group">
+                            <label><input type="radio" id="rad-disabled" name="plan" value="legacy" disabled
+                                    data-testid="radio-disabled"> Legacy (disabled)</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- File Upload -->
+        <div class="section">
+            <h2>File Upload</h2>
+            <form id="file-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inp-file-single">Single File</label>
+                        <input type="file" id="inp-file-single" name="file" data-testid="file-single">
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-file-multi">Multiple Files</label>
+                        <input type="file" id="inp-file-multi" name="files" multiple data-testid="file-multi">
+                    </div>
+                    <div class="form-group">
+                        <label for="inp-file-image">Images Only</label>
+                        <input type="file" id="inp-file-image" name="image" accept="image/*" data-testid="file-image">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Fieldset & Legend -->
+        <div class="section">
+            <h2>Fieldset &amp; Legend</h2>
+            <form id="fieldset-form">
+                <fieldset
+                    style="border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px">
+                    <legend style="padding:0 8px;font-weight:600;font-size:14px">Personal Information</legend>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fs-firstname">First Name <span style="color:var(--danger)">*</span></label>
+                            <input type="text" id="fs-firstname" name="firstname" required
+                                data-testid="fieldset-firstname">
+                        </div>
+                        <div class="form-group">
+                            <label for="fs-lastname">Last Name <span style="color:var(--danger)">*</span></label>
+                            <input type="text" id="fs-lastname" name="lastname" required
+                                data-testid="fieldset-lastname">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fs-email">Email <span style="color:var(--danger)">*</span></label>
+                        <input type="email" id="fs-email" name="email" required data-testid="fieldset-email">
+                    </div>
+                </fieldset>
+
+                <fieldset
+                    style="border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px">
+                    <legend style="padding:0 8px;font-weight:600;font-size:14px">Account Settings</legend>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fs-username">Username <span style="color:var(--danger)">*</span></label>
+                            <input type="text" id="fs-username" name="username" required minlength="3" maxlength="20"
+                                pattern="[a-zA-Z0-9_]+" data-testid="fieldset-username">
+                            <span class="form-hint">3–20 chars, letters/numbers/underscore only</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="fs-password">Password <span style="color:var(--danger)">*</span></label>
+                            <input type="password" id="fs-password" name="password" required minlength="8"
+                                data-testid="fieldset-password">
+                            <span class="form-hint">Minimum 8 characters</span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary" id="fieldset-submit">Submit Form</button>
+                    <button type="reset" class="btn btn-secondary" id="fieldset-reset">Reset</button>
+                </div>
+                <div id="fieldset-result" class="output-box mt-8" style="display:none"></div>
+            </form>
+        </div>
+
+        <!-- HTML5 Validation -->
+        <div class="section">
+            <h2>HTML5 Validation Attributes</h2>
+            <form id="validation-form" novalidate>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="val-required">Required Field</label>
+                        <input type="text" id="val-required" name="required_field" required
+                            placeholder="Cannot be empty" data-testid="val-required">
+                        <span class="form-error" id="err-required">This field is required.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="val-minlength">Min Length (5)</label>
+                        <input type="text" id="val-minlength" name="minlen" minlength="5" placeholder="At least 5 chars"
+                            data-testid="val-minlength">
+                        <span class="form-error" id="err-minlength">Minimum 5 characters required.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="val-pattern">Pattern (ZIP code)</label>
+                        <input type="text" id="val-pattern" name="zip" pattern="\d{5}" placeholder="12345"
+                            data-testid="val-pattern">
+                        <span class="form-error" id="err-pattern">Must be exactly 5 digits.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="val-min">Min Value (18)</label>
+                        <input type="number" id="val-min" name="age" min="18" max="120" placeholder="Age"
+                            data-testid="val-min">
+                        <span class="form-error" id="err-min">Must be at least 18.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="val-email">Email Format</label>
+                        <input type="email" id="val-email" name="email_val" placeholder="valid@email.com"
+                            data-testid="val-email">
+                        <span class="form-error" id="err-email">Enter a valid email address.</span>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary" id="validation-submit">Validate &amp; Submit</button>
+                    <button type="button" class="btn btn-secondary" id="validation-clear"
+                        onclick="clearValidation()">Clear Errors</button>
+                </div>
+                <div id="validation-result" class="mt-8"></div>
+            </form>
+        </div>
+
+        <!-- Output Element -->
+        <div class="section">
+            <h2>Output Element &amp; Calculation</h2>
+            <form id="calc-form" oninput="calcResult.value = parseInt(calcA.value||0) + parseInt(calcB.value||0)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="calcA">Value A</label>
+                        <input type="number" id="calcA" name="a" value="10" data-testid="calc-a">
+                    </div>
+                    <div class="form-group">
+                        <label for="calcB">Value B</label>
+                        <input type="number" id="calcB" name="b" value="20" data-testid="calc-b">
+                    </div>
+                    <div class="form-group">
+                        <label for="calcResult">Sum (output)</label>
+                        <output id="calcResult" name="result" for="calcA calcB"
+                            style="display:block;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);font-size:14px">30</output>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+        // Char counter
+        document.getElementById('inp-textarea').addEventListener('input', function () {
+            document.getElementById('char-count').textContent = this.value.length;
+        });
+
+        // Indeterminate checkbox
+        document.getElementById('chk-indeterminate').indeterminate = true;
+
+        // Validation form
+        document.getElementById('validation-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            let valid = true;
+            const fields = [
+                { id: 'val-required', errId: 'err-required', check: v => v.trim() !== '' },
+                { id: 'val-minlength', errId: 'err-minlength', check: v => v.length === 0 || v.length >= 5 },
+                { id: 'val-pattern', errId: 'err-pattern', check: v => v === '' || /^\d{5}$/.test(v) },
+                { id: 'val-min', errId: 'err-min', check: v => v === '' || parseInt(v) >= 18 },
+                { id: 'val-email', errId: 'err-email', check: v => v === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+            ];
+            fields.forEach(f => {
+                const inp = document.getElementById(f.id);
+                const err = document.getElementById(f.errId);
+                if (!f.check(inp.value)) {
+                    err.classList.add('visible');
+                    inp.style.borderColor = 'var(--danger)';
+                    valid = false;
+                } else {
+                    err.classList.remove('visible');
+                    inp.style.borderColor = '';
+                }
+            });
+            const res = document.getElementById('validation-result');
+            if (valid) {
+                res.innerHTML = '<div class="alert alert-success">✅ Form is valid! All fields passed validation.</div>';
+            } else {
+                res.innerHTML = '<div class="alert alert-danger">❌ Please fix the errors above.</div>';
+            }
+        });
+
+        function clearValidation() {
+            document.querySelectorAll('.form-error').forEach(e => e.classList.remove('visible'));
+            document.querySelectorAll('#validation-form input').forEach(i => i.style.borderColor = '');
+            document.getElementById('validation-result').innerHTML = '';
+        }
+
+        // Fieldset form
+        document.getElementById('fieldset-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const data = new FormData(this);
+            const obj = {};
+            data.forEach((v, k) => obj[k] = v);
+            const res = document.getElementById('fieldset-result');
+            res.style.display = 'block';
+            res.textContent = JSON.stringify(obj, null, 2);
+        });
+    </script>
+</body>
+
+</html>

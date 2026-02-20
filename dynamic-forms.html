@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWO QA – Dynamic Forms</title>
+    <script src="vwo-loader.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <nav class="site-nav">
+        <span class="nav-brand">🧪 VWO QA Site</span>
+        <a href="index.html" onclick="return preserveQueryParams(this)">Home</a>
+        <a href="forms.html" onclick="return preserveQueryParams(this)">Forms</a>
+        <a href="dynamic-forms.html" onclick="return preserveQueryParams(this)">Dynamic Forms</a>
+        <a href="custom-elements.html" onclick="return preserveQueryParams(this)">Custom Elements</a>
+        <a href="shadow-dom.html" onclick="return preserveQueryParams(this)">Shadow DOM</a>
+        <a href="canvas.html" onclick="return preserveQueryParams(this)">Canvas</a>
+        <a href="tables.html" onclick="return preserveQueryParams(this)">Tables</a>
+        <a href="media.html" onclick="return preserveQueryParams(this)">Media</a>
+        <a href="interactive.html" onclick="return preserveQueryParams(this)">Interactive</a>
+        <a href="dom-events.html" onclick="return preserveQueryParams(this)">DOM Events</a>
+        <a href="storage.html" onclick="return preserveQueryParams(this)">Storage</a>
+        <a href="ajax.html" onclick="return preserveQueryParams(this)">AJAX</a>
+        <a href="accessibility.html" onclick="return preserveQueryParams(this)">Accessibility</a>
+    </nav>
+
+    <div class="page-header">
+        <h1>Dynamic Forms</h1>
+        <p>Forms with dynamic field addition/removal, conditional logic, multi-step wizard, and real-time validation.
+        </p>
+    </div>
+
+    <main class="content">
+
+        <!-- Dynamic Field Addition -->
+        <div class="section">
+            <h2>Dynamic Field Addition / Removal</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">Add or remove email recipients dynamically.</p>
+            <form id="dynamic-fields-form">
+                <div id="email-fields-container">
+                    <div class="form-row email-row" data-index="0">
+                        <div class="form-group" style="flex:1">
+                            <label>Email #1</label>
+                            <input type="email" name="emails[]" placeholder="email@example.com"
+                                data-testid="dynamic-email-0">
+                        </div>
+                        <div class="form-group" style="flex:0;align-self:flex-end">
+                            <button type="button" class="btn btn-danger btn-sm remove-email-btn" disabled>✕
+                                Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" id="add-email-btn">+ Add Email</button>
+                    <button type="submit" class="btn btn-primary" id="dynamic-submit">Submit</button>
+                </div>
+                <div id="dynamic-fields-result" class="output-box mt-8" style="display:none"></div>
+            </form>
+        </div>
+
+        <!-- Conditional Fields -->
+        <div class="section">
+            <h2>Conditional Fields</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">Fields appear/disappear based on selections.</p>
+            <form id="conditional-form">
+                <div class="form-group">
+                    <label for="cond-role">I am a…</label>
+                    <select id="cond-role" name="role" data-testid="cond-role">
+                        <option value="">-- Select Role --</option>
+                        <option value="individual">Individual</option>
+                        <option value="company">Company</option>
+                        <option value="agency">Agency</option>
+                    </select>
+                </div>
+
+                <!-- Individual fields -->
+                <div id="individual-fields" style="display:none">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cond-firstname">First Name</label>
+                            <input type="text" id="cond-firstname" name="firstname" data-testid="cond-firstname">
+                        </div>
+                        <div class="form-group">
+                            <label for="cond-lastname">Last Name</label>
+                            <input type="text" id="cond-lastname" name="lastname" data-testid="cond-lastname">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cond-dob">Date of Birth</label>
+                        <input type="date" id="cond-dob" name="dob" data-testid="cond-dob">
+                    </div>
+                </div>
+
+                <!-- Company fields -->
+                <div id="company-fields" style="display:none">
+                    <div class="form-group">
+                        <label for="cond-company">Company Name</label>
+                        <input type="text" id="cond-company" name="company_name" data-testid="cond-company">
+                    </div>
+                    <div class="form-group">
+                        <label for="cond-gst">GST / Tax ID</label>
+                        <input type="text" id="cond-gst" name="gst" data-testid="cond-gst">
+                    </div>
+                    <div class="form-group">
+                        <label for="cond-employees">Number of Employees</label>
+                        <select id="cond-employees" name="employees" data-testid="cond-employees">
+                            <option value="1-10">1–10</option>
+                            <option value="11-50">11–50</option>
+                            <option value="51-200">51–200</option>
+                            <option value="200+">200+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Agency fields -->
+                <div id="agency-fields" style="display:none">
+                    <div class="form-group">
+                        <label for="cond-agency-name">Agency Name</label>
+                        <input type="text" id="cond-agency-name" name="agency_name" data-testid="cond-agency-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="cond-clients">Number of Clients</label>
+                        <input type="number" id="cond-clients" name="clients" min="1" data-testid="cond-clients">
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" id="cond-reseller" name="reseller" data-testid="cond-reseller">
+                            Reseller Partner</label>
+                    </div>
+                </div>
+
+                <!-- Common fields -->
+                <div class="form-group">
+                    <label for="cond-email">Email Address</label>
+                    <input type="email" id="cond-email" name="email" data-testid="cond-email">
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary" id="conditional-submit">Submit</button>
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+                <div id="conditional-result" class="output-box mt-8" style="display:none"></div>
+            </form>
+        </div>
+
+        <!-- Multi-Step Wizard -->
+        <div class="section">
+            <h2>Multi-Step Wizard Form</h2>
+            <div class="wizard-steps" id="wizard-steps">
+                <div class="wizard-step active" data-step="1">1. Account</div>
+                <div class="wizard-step" data-step="2">2. Profile</div>
+                <div class="wizard-step" data-step="3">3. Preferences</div>
+                <div class="wizard-step" data-step="4">4. Review</div>
+            </div>
+
+            <form id="wizard-form" novalidate>
+                <!-- Step 1 -->
+                <div class="wizard-panel active" id="wizard-step-1">
+                    <h3>Account Details</h3>
+                    <div class="form-group">
+                        <label for="wiz-email">Email <span style="color:var(--danger)">*</span></label>
+                        <input type="email" id="wiz-email" name="email" required placeholder="you@example.com"
+                            data-testid="wiz-email">
+                        <span class="form-error" id="wiz-err-email">Valid email required.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="wiz-password">Password <span style="color:var(--danger)">*</span></label>
+                        <input type="password" id="wiz-password" name="password" required minlength="8"
+                            placeholder="Min 8 chars" data-testid="wiz-password">
+                        <span class="form-error" id="wiz-err-password">Minimum 8 characters.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="wiz-confirm">Confirm Password <span style="color:var(--danger)">*</span></label>
+                        <input type="password" id="wiz-confirm" name="confirm" required placeholder="Repeat password"
+                            data-testid="wiz-confirm">
+                        <span class="form-error" id="wiz-err-confirm">Passwords do not match.</span>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" id="wiz-next-1" onclick="wizardNext(1)">Next
+                            →</button>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="wizard-panel" id="wizard-step-2">
+                    <h3>Profile Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="wiz-fname">First Name <span style="color:var(--danger)">*</span></label>
+                            <input type="text" id="wiz-fname" name="fname" required data-testid="wiz-fname">
+                            <span class="form-error" id="wiz-err-fname">Required.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="wiz-lname">Last Name <span style="color:var(--danger)">*</span></label>
+                            <input type="text" id="wiz-lname" name="lname" required data-testid="wiz-lname">
+                            <span class="form-error" id="wiz-err-lname">Required.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="wiz-phone">Phone</label>
+                        <input type="tel" id="wiz-phone" name="phone" placeholder="+91 98765 43210"
+                            data-testid="wiz-phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="wiz-bio">Bio</label>
+                        <textarea id="wiz-bio" name="bio" rows="3" placeholder="Tell us about yourself…"
+                            data-testid="wiz-bio"></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="wizardBack(2)">← Back</button>
+                        <button type="button" class="btn btn-primary" onclick="wizardNext(2)">Next →</button>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="wizard-panel" id="wizard-step-3">
+                    <h3>Preferences</h3>
+                    <div class="form-group">
+                        <label for="wiz-plan">Plan</label>
+                        <select id="wiz-plan" name="plan" data-testid="wiz-plan">
+                            <option value="free">Free</option>
+                            <option value="growth">Growth ($49/mo)</option>
+                            <option value="enterprise">Enterprise (Custom)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Notifications</label>
+                        <div>
+                            <label><input type="checkbox" name="notif_email" value="1" checked
+                                    data-testid="wiz-notif-email"> Email notifications</label><br>
+                            <label><input type="checkbox" name="notif_sms" value="1" data-testid="wiz-notif-sms"> SMS
+                                notifications</label><br>
+                            <label><input type="checkbox" name="notif_push" value="1" data-testid="wiz-notif-push"> Push
+                                notifications</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="wiz-timezone">Timezone</label>
+                        <select id="wiz-timezone" name="timezone" data-testid="wiz-timezone">
+                            <option value="UTC">UTC</option>
+                            <option value="IST">IST (UTC+5:30)</option>
+                            <option value="EST">EST (UTC-5)</option>
+                            <option value="PST">PST (UTC-8)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" id="wiz-tos" name="tos" required data-testid="wiz-tos"> I agree to
+                            the Terms of Service</label>
+                        <span class="form-error" id="wiz-err-tos">You must agree to continue.</span>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="wizardBack(3)">← Back</button>
+                        <button type="button" class="btn btn-primary" onclick="wizardNext(3)">Review →</button>
+                    </div>
+                </div>
+
+                <!-- Step 4 - Review -->
+                <div class="wizard-panel" id="wizard-step-4">
+                    <h3>Review &amp; Submit</h3>
+                    <div id="wizard-review" class="output-box" style="margin-bottom:16px"></div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="wizardBack(4)">← Back</button>
+                        <button type="submit" class="btn btn-success" id="wizard-submit">✓ Create Account</button>
+                    </div>
+                    <div id="wizard-success" class="alert alert-success mt-8" style="display:none">
+                        🎉 Account created successfully! (Demo)
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Real-time Validation -->
+        <div class="section">
+            <h2>Real-Time Validation</h2>
+            <form id="realtime-form">
+                <div class="form-group">
+                    <label for="rt-username">Username</label>
+                    <input type="text" id="rt-username" name="username" placeholder="Choose a username"
+                        data-testid="rt-username" autocomplete="off">
+                    <div id="rt-username-feedback" class="form-hint"></div>
+                </div>
+                <div class="form-group">
+                    <label for="rt-password">Password Strength</label>
+                    <input type="password" id="rt-password" name="password" placeholder="Enter password"
+                        data-testid="rt-password">
+                    <div class="progress-bar-wrap mt-8">
+                        <div class="progress-bar-fill" id="pw-strength-bar" style="width:0%;background:var(--danger)">
+                        </div>
+                    </div>
+                    <div id="pw-strength-label" class="form-hint">Enter a password to see strength</div>
+                </div>
+                <div class="form-group">
+                    <label for="rt-email">Email (async check simulation)</label>
+                    <input type="email" id="rt-email" name="email" placeholder="email@example.com"
+                        data-testid="rt-email">
+                    <div id="rt-email-feedback" class="form-hint"></div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Auto-complete Simulation -->
+        <div class="section">
+            <h2>Autocomplete / Typeahead</h2>
+            <div class="form-group" style="position:relative;max-width:400px">
+                <label for="autocomplete-input">Search Countries</label>
+                <input type="text" id="autocomplete-input" placeholder="Type to search…" autocomplete="off"
+                    data-testid="autocomplete-input">
+                <div id="autocomplete-dropdown"
+                    style="position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);z-index:100;display:none;max-height:200px;overflow-y:auto">
+                </div>
+            </div>
+            <div id="autocomplete-selected" class="form-hint"></div>
+        </div>
+
+        <!-- Form Clone -->
+        <div class="section">
+            <h2>Repeatable Form Sections (Clone)</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">Add multiple work experience entries.</p>
+            <div id="experience-container">
+                <div class="experience-entry"
+                    style="border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px"
+                    data-entry="0">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                        <strong style="font-size:14px">Experience #1</strong>
+                        <button type="button" class="btn btn-danger btn-sm remove-exp-btn" disabled>Remove</button>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input type="text" name="exp_company[]" placeholder="Company name"
+                                data-testid="exp-company-0">
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input type="text" name="exp_role[]" placeholder="Job title" data-testid="exp-role-0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>From</label>
+                            <input type="month" name="exp_from[]" data-testid="exp-from-0">
+                        </div>
+                        <div class="form-group">
+                            <label>To</label>
+                            <input type="month" name="exp_to[]" data-testid="exp-to-0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary" id="add-experience-btn">+ Add Experience</button>
+        </div>
+
+        <!-- ── Dynamic ID Tracking ─────────────────────────────────────────── -->
+        <div class="section">
+            <h2>Dynamic ID Tracking</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">
+                Tests VWO's ability to track elements whose <code>id</code> attribute changes
+                on every page load or user interaction.
+            </p>
+
+            <!-- 1. Random ID on page load -->
+            <h3>1. Random ID on Page Load</h3>
+            <p class="text-sm text-muted" style="margin-bottom:10px">
+                The input below starts as <code>id="input-123"</code> in HTML but
+                <code>window.onload</code> randomises it to <code>input-{000–999}</code>.
+                Reload the page to see a new ID each time.
+            </p>
+            <div class="form-group" style="max-width:360px">
+                <label for="input-123">Random-ID Input</label>
+                <input type="text" id="input-123" name="random_id_field" placeholder="My id changes on every load"
+                    data-testid="random-id-input">
+                <span class="form-hint" id="random-id-display">Current ID: input-123 (loading…)</span>
+            </div>
+
+            <hr class="divider">
+
+            <!-- 2. changeFieldId – ID changes on field interaction -->
+            <h3>2. Dynamic ID on Field Change (<code>changeFieldId</code>)</h3>
+            <p class="text-sm text-muted" style="margin-bottom:10px">
+                Each field below appends a random suffix to its <code>id</code> when you
+                blur/change it. VWO must fall back to the stable <code>name</code> attribute
+                for tracking.
+            </p>
+            <form id="dynamic-id-form" style="max-width:480px">
+                <div class="form-group">
+                    <label for="dyn-name">Name (id changes on change)</label>
+                    <input type="text" id="dyn-name" name="name_1" placeholder="Type something then tab out"
+                        onchange="changeFieldId(this)" data-testid="dyn-name-input">
+                </div>
+                <div class="form-group">
+                    <label for="dyn-email">Email (id changes on change)</label>
+                    <input type="email" id="dyn-email" name="email_1" placeholder="Type something then tab out"
+                        onchange="changeFieldId(this)" data-testid="dyn-email-input">
+                </div>
+                <div class="form-hint" id="dynamic-id-display">Current ID: (interact with a field above)</div>
+                <div class="btn-group" style="margin-top:12px">
+                    <input type="submit" class="btn btn-primary" value="Submit">
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+        // ── Random ID on page load ──────────────────────────────────────────
+        window.addEventListener('load', function () {
+            var n = Math.floor(Math.random() * 1000);
+            var formatted = String(n).padStart(3, '0');
+            var el = document.getElementById('input-123');
+            if (el) {
+                el.id = 'input-' + formatted;
+                var display = document.getElementById('random-id-display');
+                if (display) display.textContent = 'Current ID: input-' + formatted;
+                console.log('[Random ID] input-123 → input-' + formatted);
+            }
+        });
+    </script>
+    <script>
+        // ===== Dynamic email fields =====
+        let emailCount = 1;
+        document.getElementById('add-email-btn').addEventListener('click', function () {
+            emailCount++;
+            const container = document.getElementById('email-fields-container');
+            const row = document.createElement('div');
+            row.className = 'form-row email-row';
+            row.dataset.index = emailCount - 1;
+            row.innerHTML = `
+    <div class="form-group" style="flex:1">
+      <label>Email #${emailCount}</label>
+      <input type="email" name="emails[]" placeholder="email@example.com" data-testid="dynamic-email-${emailCount - 1}">
+    </div>
+    <div class="form-group" style="flex:0;align-self:flex-end">
+      <button type="button" class="btn btn-danger btn-sm remove-email-btn">✕ Remove</button>
+    </div>`;
+            container.appendChild(row);
+            updateRemoveButtons();
+        });
+
+        document.getElementById('email-fields-container').addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-email-btn')) {
+                e.target.closest('.email-row').remove();
+                emailCount--;
+                updateRemoveButtons();
+                renumberEmails();
+            }
+        });
+
+        function updateRemoveButtons() {
+            const rows = document.querySelectorAll('.email-row');
+            rows.forEach(r => r.querySelector('.remove-email-btn').disabled = rows.length === 1);
+        }
+
+        function renumberEmails() {
+            document.querySelectorAll('.email-row').forEach((row, i) => {
+                row.querySelector('label').textContent = `Email #${i + 1}`;
+            });
+        }
+
+        document.getElementById('dynamic-fields-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const emails = [...this.querySelectorAll('input[name="emails[]"]')].map(i => i.value);
+            const res = document.getElementById('dynamic-fields-result');
+            res.style.display = 'block';
+            res.textContent = JSON.stringify({ emails }, null, 2);
+        });
+
+        // ===== Conditional fields =====
+        document.getElementById('cond-role').addEventListener('change', function () {
+            ['individual', 'company', 'agency'].forEach(t => {
+                document.getElementById(t + '-fields').style.display = 'none';
+            });
+            if (this.value) {
+                document.getElementById(this.value + '-fields').style.display = 'block';
+            }
+        });
+
+        document.getElementById('conditional-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const data = new FormData(this);
+            const obj = {};
+            data.forEach((v, k) => obj[k] = v);
+            const res = document.getElementById('conditional-result');
+            res.style.display = 'block';
+            res.textContent = JSON.stringify(obj, null, 2);
+        });
+
+        // ===== Wizard =====
+        let wizardData = {};
+        function wizardNext(step) {
+            if (step === 1) {
+                const email = document.getElementById('wiz-email').value;
+                const pw = document.getElementById('wiz-password').value;
+                const confirm = document.getElementById('wiz-confirm').value;
+                let ok = true;
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { document.getElementById('wiz-err-email').classList.add('visible'); ok = false; } else document.getElementById('wiz-err-email').classList.remove('visible');
+                if (pw.length < 8) { document.getElementById('wiz-err-password').classList.add('visible'); ok = false; } else document.getElementById('wiz-err-password').classList.remove('visible');
+                if (pw !== confirm) { document.getElementById('wiz-err-confirm').classList.add('visible'); ok = false; } else document.getElementById('wiz-err-confirm').classList.remove('visible');
+                if (!ok) return;
+                wizardData.email = email;
+            }
+            if (step === 2) {
+                const fname = document.getElementById('wiz-fname').value;
+                const lname = document.getElementById('wiz-lname').value;
+                let ok = true;
+                if (!fname) { document.getElementById('wiz-err-fname').classList.add('visible'); ok = false; } else document.getElementById('wiz-err-fname').classList.remove('visible');
+                if (!lname) { document.getElementById('wiz-err-lname').classList.add('visible'); ok = false; } else document.getElementById('wiz-err-lname').classList.remove('visible');
+                if (!ok) return;
+                wizardData.name = fname + ' ' + lname;
+            }
+            if (step === 3) {
+                const tos = document.getElementById('wiz-tos').checked;
+                if (!tos) { document.getElementById('wiz-err-tos').classList.add('visible'); return; }
+                document.getElementById('wiz-err-tos').classList.remove('visible');
+                wizardData.plan = document.getElementById('wiz-plan').value;
+                // Build review
+                document.getElementById('wizard-review').textContent = JSON.stringify(wizardData, null, 2);
+            }
+            goToStep(step + 1);
+        }
+
+        function wizardBack(step) { goToStep(step - 1); }
+
+        function goToStep(n) {
+            document.querySelectorAll('.wizard-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('wizard-step-' + n).classList.add('active');
+            document.querySelectorAll('.wizard-step').forEach((s, i) => {
+                s.classList.remove('active', 'done');
+                if (i + 1 < n) s.classList.add('done');
+                if (i + 1 === n) s.classList.add('active');
+            });
+        }
+
+        document.getElementById('wizard-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            document.getElementById('wizard-success').style.display = 'block';
+            document.getElementById('wizard-submit').disabled = true;
+        });
+
+        // ===== Real-time validation =====
+        const takenUsernames = ['admin', 'root', 'test', 'user', 'vwo'];
+        document.getElementById('rt-username').addEventListener('input', function () {
+            const val = this.value.trim();
+            const fb = document.getElementById('rt-username-feedback');
+            if (!val) { fb.textContent = ''; return; }
+            if (val.length < 3) { fb.textContent = '⚠️ Too short (min 3 chars)'; fb.style.color = 'var(--warning)'; return; }
+            if (takenUsernames.includes(val.toLowerCase())) { fb.textContent = '❌ Username taken'; fb.style.color = 'var(--danger)'; return; }
+            fb.textContent = '✅ Username available'; fb.style.color = 'var(--success)';
+        });
+
+        document.getElementById('rt-password').addEventListener('input', function () {
+            const pw = this.value;
+            let score = 0;
+            if (pw.length >= 8) score++;
+            if (/[A-Z]/.test(pw)) score++;
+            if (/[0-9]/.test(pw)) score++;
+            if (/[^A-Za-z0-9]/.test(pw)) score++;
+            const bar = document.getElementById('pw-strength-bar');
+            const label = document.getElementById('pw-strength-label');
+            const pct = (score / 4) * 100;
+            bar.style.width = pct + '%';
+            const colors = ['var(--danger)', 'var(--warning)', '#eab308', 'var(--success)'];
+            const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+            bar.style.background = colors[Math.max(0, score - 1)] || 'var(--danger)';
+            label.textContent = pw ? labels[Math.max(0, score - 1)] || 'Weak' : 'Enter a password to see strength';
+        });
+
+        let emailCheckTimer;
+        document.getElementById('rt-email').addEventListener('input', function () {
+            clearTimeout(emailCheckTimer);
+            const fb = document.getElementById('rt-email-feedback');
+            fb.textContent = '⏳ Checking…';
+            emailCheckTimer = setTimeout(() => {
+                const val = this.value;
+                if (!val) { fb.textContent = ''; return; }
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) { fb.textContent = '❌ Invalid email format'; fb.style.color = 'var(--danger)'; return; }
+                fb.textContent = '✅ Email looks valid'; fb.style.color = 'var(--success)';
+            }, 600);
+        });
+
+        // ===== Autocomplete =====
+        const countries = ['Afghanistan', 'Albania', 'Algeria', 'Argentina', 'Australia', 'Austria', 'Bangladesh', 'Belgium', 'Brazil', 'Canada', 'Chile', 'China', 'Colombia', 'Denmark', 'Egypt', 'Ethiopia', 'Finland', 'France', 'Germany', 'Ghana', 'Greece', 'Hungary', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy', 'Japan', 'Kenya', 'Malaysia', 'Mexico', 'Morocco', 'Netherlands', 'New Zealand', 'Nigeria', 'Norway', 'Pakistan', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Romania', 'Russia', 'Saudi Arabia', 'South Africa', 'South Korea', 'Spain', 'Sri Lanka', 'Sweden', 'Switzerland', 'Tanzania', 'Thailand', 'Turkey', 'Uganda', 'Ukraine', 'United Kingdom', 'United States', 'Vietnam', 'Zimbabwe'];
+
+        const acInput = document.getElementById('autocomplete-input');
+        const acDropdown = document.getElementById('autocomplete-dropdown');
+
+        acInput.addEventListener('input', function () {
+            const q = this.value.toLowerCase();
+            if (!q) { acDropdown.style.display = 'none'; return; }
+            const matches = countries.filter(c => c.toLowerCase().includes(q)).slice(0, 8);
+            if (!matches.length) { acDropdown.style.display = 'none'; return; }
+            acDropdown.innerHTML = matches.map(c =>
+                `<div class="ac-item" style="padding:8px 12px;cursor:pointer;font-size:14px;border-bottom:1px solid var(--border)">${c}</div>`
+            ).join('');
+            acDropdown.style.display = 'block';
+        });
+
+        acDropdown.addEventListener('click', function (e) {
+            if (e.target.classList.contains('ac-item')) {
+                acInput.value = e.target.textContent;
+                acDropdown.style.display = 'none';
+                document.getElementById('autocomplete-selected').textContent = 'Selected: ' + e.target.textContent;
+            }
+        });
+
+        document.addEventListener('click', e => {
+            if (!acInput.contains(e.target) && !acDropdown.contains(e.target)) acDropdown.style.display = 'none';
+        });
+
+        // ===== Experience clone =====
+        let expCount = 1;
+        document.getElementById('add-experience-btn').addEventListener('click', function () {
+            expCount++;
+            const container = document.getElementById('experience-container');
+            const entry = document.createElement('div');
+            entry.className = 'experience-entry';
+            entry.style.cssText = 'border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px';
+            entry.dataset.entry = expCount - 1;
+            entry.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <strong style="font-size:14px">Experience #${expCount}</strong>
+      <button type="button" class="btn btn-danger btn-sm remove-exp-btn">Remove</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Company</label><input type="text" name="exp_company[]" placeholder="Company name" data-testid="exp-company-${expCount - 1}"></div>
+      <div class="form-group"><label>Role</label><input type="text" name="exp_role[]" placeholder="Job title" data-testid="exp-role-${expCount - 1}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>From</label><input type="month" name="exp_from[]" data-testid="exp-from-${expCount - 1}"></div>
+      <div class="form-group"><label>To</label><input type="month" name="exp_to[]" data-testid="exp-to-${expCount - 1}"></div>
+    </div>`;
+            container.appendChild(entry);
+            updateExpButtons();
+        });
+
+        document.getElementById('experience-container').addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-exp-btn')) {
+                e.target.closest('.experience-entry').remove();
+                expCount--;
+                updateExpButtons();
+                renumberExp();
+            }
+        });
+
+        function updateExpButtons() {
+            const entries = document.querySelectorAll('.experience-entry');
+            entries.forEach(e => e.querySelector('.remove-exp-btn').disabled = entries.length === 1);
+        }
+
+        function renumberExp() {
+            document.querySelectorAll('.experience-entry').forEach((e, i) => {
+                e.querySelector('strong').textContent = `Experience #${i + 1}`;
+            });
+        }
+    </script>
+</body>
+
+</html>

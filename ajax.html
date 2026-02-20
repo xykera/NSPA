@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWO QA – AJAX</title>
+    <script src="vwo-loader.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <nav class="site-nav">
+        <span class="nav-brand">🧪 VWO QA Site</span>
+        <a href="index.html" onclick="return preserveQueryParams(this)">Home</a>
+        <a href="forms.html" onclick="return preserveQueryParams(this)">Forms</a>
+        <a href="dynamic-forms.html" onclick="return preserveQueryParams(this)">Dynamic Forms</a>
+        <a href="custom-elements.html" onclick="return preserveQueryParams(this)">Custom Elements</a>
+        <a href="shadow-dom.html" onclick="return preserveQueryParams(this)">Shadow DOM</a>
+        <a href="canvas.html" onclick="return preserveQueryParams(this)">Canvas</a>
+        <a href="tables.html" onclick="return preserveQueryParams(this)">Tables</a>
+        <a href="media.html" onclick="return preserveQueryParams(this)">Media</a>
+        <a href="interactive.html" onclick="return preserveQueryParams(this)">Interactive</a>
+        <a href="dom-events.html" onclick="return preserveQueryParams(this)">DOM Events</a>
+        <a href="storage.html" onclick="return preserveQueryParams(this)">Storage</a>
+        <a href="ajax.html" onclick="return preserveQueryParams(this)">AJAX</a>
+        <a href="accessibility.html" onclick="return preserveQueryParams(this)">Accessibility</a>
+    </nav>
+
+    <div class="page-header">
+        <h1>AJAX / Network Requests</h1>
+        <p>Fetch API, XMLHttpRequest, loading states, error handling, abort controller, and polling.</p>
+    </div>
+
+    <main class="content">
+
+        <!-- Fetch GET -->
+        <div class="section">
+            <h2>Fetch GET Request</h2>
+            <div class="form-row">
+                <div class="form-group" style="flex:2">
+                    <label for="fetch-url">URL</label>
+                    <input type="url" id="fetch-url" value="https://jsonplaceholder.typicode.com/posts/1"
+                        data-testid="fetch-url">
+                </div>
+                <div class="form-group" style="flex:0;align-self:flex-end">
+                    <button class="btn btn-primary" id="fetch-get-btn" onclick="doFetchGet()">Fetch GET</button>
+                </div>
+            </div>
+            <div id="fetch-get-loading" style="display:none" class="alert alert-info">⏳ Loading…</div>
+            <div class="output-box mt-8" id="fetch-get-result" style="min-height:80px"></div>
+        </div>
+
+        <!-- Fetch POST -->
+        <div class="section">
+            <h2>Fetch POST Request</h2>
+            <div class="form-group">
+                <label for="post-url">URL</label>
+                <input type="url" id="post-url" value="https://jsonplaceholder.typicode.com/posts"
+                    data-testid="post-url">
+            </div>
+            <div class="form-group">
+                <label for="post-body">Request Body (JSON)</label>
+                <textarea id="post-body" rows="5" data-testid="post-body">{
+  "title": "VWO Test Post",
+  "body": "This is a test post from the QA site",
+  "userId": 1
+}</textarea>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="fetch-post-btn" onclick="doFetchPost()">Fetch POST</button>
+                <button class="btn btn-secondary btn-sm"
+                    onclick="document.getElementById('fetch-post-result').textContent=''">Clear</button>
+            </div>
+            <div id="fetch-post-loading" style="display:none" class="alert alert-info mt-8">⏳ Posting…</div>
+            <div class="output-box mt-8" id="fetch-post-result" style="min-height:80px"></div>
+        </div>
+
+        <!-- XMLHttpRequest -->
+        <div class="section">
+            <h2>XMLHttpRequest (XHR)</h2>
+            <div class="form-row">
+                <div class="form-group" style="flex:2">
+                    <label for="xhr-url">URL</label>
+                    <input type="url" id="xhr-url" value="https://jsonplaceholder.typicode.com/users/1"
+                        data-testid="xhr-url">
+                </div>
+                <div class="form-group" style="flex:0;align-self:flex-end">
+                    <button class="btn btn-primary" id="xhr-btn" onclick="doXHR()">Send XHR</button>
+                </div>
+            </div>
+            <div class="progress-bar-wrap mt-8" style="display:none" id="xhr-progress-wrap">
+                <div class="progress-bar-fill" id="xhr-progress-bar" style="width:0%"></div>
+            </div>
+            <div class="output-box mt-8" id="xhr-result" style="min-height:80px"></div>
+        </div>
+
+        <!-- Abort Controller -->
+        <div class="section">
+            <h2>Abort Controller</h2>
+            <p class="text-sm text-muted" style="margin-bottom:10px">Start a slow request and abort it before it
+                completes.</p>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="abort-start-btn" onclick="startAbortable()">Start Slow
+                    Request</button>
+                <button class="btn btn-danger" id="abort-btn" onclick="abortRequest()" disabled>Abort Request</button>
+            </div>
+            <div class="output-box mt-8" id="abort-log" style="min-height:60px"></div>
+        </div>
+
+        <!-- Multiple Requests -->
+        <div class="section">
+            <h2>Parallel Requests (Promise.all)</h2>
+            <p class="text-sm text-muted" style="margin-bottom:10px">Fire multiple requests simultaneously and wait for
+                all to complete.</p>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="parallel-btn" onclick="doParallel()">Fire 3 Parallel
+                    Requests</button>
+            </div>
+            <div id="parallel-loading" style="display:none" class="alert alert-info mt-8">⏳ Waiting for all requests…
+            </div>
+            <div class="output-box mt-8" id="parallel-result" style="min-height:80px"></div>
+        </div>
+
+        <!-- Error Handling -->
+        <div class="section">
+            <h2>Error Handling</h2>
+            <div class="btn-group">
+                <button class="btn btn-danger btn-sm" id="err-404-btn" onclick="doErrorRequest(404)">404 Not
+                    Found</button>
+                <button class="btn btn-danger btn-sm" id="err-500-btn" onclick="doErrorRequest(500)">500 Server
+                    Error</button>
+                <button class="btn btn-warning btn-sm" id="err-timeout-btn" onclick="doTimeoutRequest()">Timeout
+                    (3s)</button>
+                <button class="btn btn-danger btn-sm" id="err-network-btn" onclick="doNetworkError()">Network
+                    Error</button>
+            </div>
+            <div class="output-box mt-8" id="error-log" style="min-height:80px"></div>
+        </div>
+
+        <!-- Polling -->
+        <div class="section">
+            <h2>Polling Simulation</h2>
+            <p class="text-sm text-muted" style="margin-bottom:10px">Simulates polling an API every 3 seconds for
+                updates.</p>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="poll-start-btn" onclick="startPolling()">▶ Start Polling</button>
+                <button class="btn btn-danger" id="poll-stop-btn" onclick="stopPolling()" disabled>⏹ Stop
+                    Polling</button>
+            </div>
+            <div id="poll-status" class="form-hint mt-8">Not polling</div>
+            <div class="output-box mt-8" id="poll-log" style="min-height:100px"></div>
+        </div>
+
+        <!-- Async Content Loading -->
+        <div class="section">
+            <h2>Async Content Loading</h2>
+            <p class="text-sm text-muted" style="margin-bottom:10px">Load content into the page dynamically after a
+                button click.</p>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="load-posts-btn" onclick="loadPosts()">Load Posts</button>
+                <button class="btn btn-secondary btn-sm"
+                    onclick="document.getElementById('async-content').innerHTML=''">Clear</button>
+            </div>
+            <div id="async-loading"
+                style="display:none;text-align:center;padding:20px;color:var(--text-muted);font-size:14px">⏳ Loading
+                posts…</div>
+            <div id="async-content" style="margin-top:12px"></div>
+        </div>
+
+        <!-- Fetch with Headers -->
+        <div class="section">
+            <h2>Fetch with Custom Headers</h2>
+            <div class="form-group">
+                <label for="header-key">Header Name</label>
+                <input type="text" id="header-key" value="X-Custom-Header" data-testid="header-key">
+            </div>
+            <div class="form-group">
+                <label for="header-value">Header Value</label>
+                <input type="text" id="header-value" value="vwo-qa-test" data-testid="header-value">
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="fetch-headers-btn" onclick="doFetchWithHeaders()">Send with
+                    Headers</button>
+            </div>
+            <div class="output-box mt-8" id="headers-log" style="min-height:60px"></div>
+        </div>
+
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+        // ===== Fetch GET =====
+        async function doFetchGet() {
+            const url = document.getElementById('fetch-url').value;
+            const loading = document.getElementById('fetch-get-loading');
+            const result = document.getElementById('fetch-get-result');
+            loading.style.display = 'block'; result.textContent = '';
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                loading.style.display = 'none';
+                result.textContent = `Status: ${res.status} ${res.statusText}\n\n${JSON.stringify(data, null, 2)}`;
+            } catch (err) {
+                loading.style.display = 'none';
+                result.textContent = 'Error: ' + err.message;
+            }
+        }
+
+        // ===== Fetch POST =====
+        async function doFetchPost() {
+            const url = document.getElementById('post-url').value;
+            const loading = document.getElementById('fetch-post-loading');
+            const result = document.getElementById('fetch-post-result');
+            loading.style.display = 'block';
+            try {
+                const body = JSON.parse(document.getElementById('post-body').value);
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await res.json();
+                loading.style.display = 'none';
+                result.textContent = `Status: ${res.status} ${res.statusText}\n\n${JSON.stringify(data, null, 2)}`;
+            } catch (err) {
+                loading.style.display = 'none';
+                result.textContent = 'Error: ' + err.message;
+            }
+        }
+
+        // ===== XHR =====
+        function doXHR() {
+            const url = document.getElementById('xhr-url').value;
+            const result = document.getElementById('xhr-result');
+            const progressWrap = document.getElementById('xhr-progress-wrap');
+            const progressBar = document.getElementById('xhr-progress-bar');
+            progressWrap.style.display = 'block'; progressBar.style.width = '0%';
+            result.textContent = 'Sending XHR request…';
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.onprogress = e => {
+                if (e.lengthComputable) progressBar.style.width = (e.loaded / e.total * 100) + '%';
+                else progressBar.style.width = '50%';
+            };
+            xhr.onload = function () {
+                progressBar.style.width = '100%';
+                setTimeout(() => progressWrap.style.display = 'none', 500);
+                try {
+                    const data = JSON.parse(this.responseText);
+                    result.textContent = `readyState: ${this.readyState} | Status: ${this.status}\n\n${JSON.stringify(data, null, 2)}`;
+                } catch {
+                    result.textContent = `Status: ${this.status}\n${this.responseText}`;
+                }
+            };
+            xhr.onerror = () => { result.textContent = 'XHR network error'; progressWrap.style.display = 'none'; };
+            xhr.send();
+        }
+
+        // ===== Abort Controller =====
+        let abortController = null;
+        function startAbortable() {
+            abortController = new AbortController();
+            document.getElementById('abort-start-btn').disabled = true;
+            document.getElementById('abort-btn').disabled = false;
+            logToBox('abort-log', 'Request started (will take ~5s)…', 'info');
+            fetch('https://httpbin.org/delay/5', { signal: abortController.signal })
+                .then(r => r.json())
+                .then(data => {
+                    logToBox('abort-log', 'Request completed: ' + JSON.stringify(data).slice(0, 100), 'success');
+                    document.getElementById('abort-start-btn').disabled = false;
+                    document.getElementById('abort-btn').disabled = true;
+                })
+                .catch(err => {
+                    if (err.name === 'AbortError') logToBox('abort-log', '❌ Request aborted!', 'error');
+                    else logToBox('abort-log', 'Error: ' + err.message, 'error');
+                    document.getElementById('abort-start-btn').disabled = false;
+                    document.getElementById('abort-btn').disabled = true;
+                });
+        }
+        function abortRequest() {
+            if (abortController) { abortController.abort(); logToBox('abort-log', 'Abort signal sent', 'info'); }
+        }
+
+        // ===== Parallel =====
+        async function doParallel() {
+            const loading = document.getElementById('parallel-loading');
+            const result = document.getElementById('parallel-result');
+            loading.style.display = 'block'; result.textContent = '';
+            const urls = [
+                'https://jsonplaceholder.typicode.com/posts/1',
+                'https://jsonplaceholder.typicode.com/users/1',
+                'https://jsonplaceholder.typicode.com/todos/1'
+            ];
+            try {
+                const start = Date.now();
+                const responses = await Promise.all(urls.map(u => fetch(u)));
+                const data = await Promise.all(responses.map(r => r.json()));
+                loading.style.display = 'none';
+                result.textContent = `All 3 requests completed in ${Date.now() - start}ms\n\n${data.map((d, i) => `[${i + 1}] ${JSON.stringify(d).slice(0, 100)}…`).join('\n\n')}`;
+            } catch (err) {
+                loading.style.display = 'none';
+                result.textContent = 'Error: ' + err.message;
+            }
+        }
+
+        // ===== Error Handling =====
+        async function doErrorRequest(status) {
+            logToBox('error-log', `Fetching status ${status}…`, 'info');
+            try {
+                const res = await fetch(`https://httpbin.org/status/${status}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                logToBox('error-log', 'Success (unexpected)', 'success');
+            } catch (err) {
+                logToBox('error-log', `❌ Error: ${err.message}`, 'error');
+            }
+        }
+
+        async function doTimeoutRequest() {
+            logToBox('error-log', 'Starting request with 3s timeout…', 'info');
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 3000);
+            try {
+                await fetch('https://httpbin.org/delay/10', { signal: controller.signal });
+                clearTimeout(timeout);
+                logToBox('error-log', 'Completed (unexpected)', 'success');
+            } catch (err) {
+                clearTimeout(timeout);
+                logToBox('error-log', err.name === 'AbortError' ? '⏱️ Request timed out after 3s' : `Error: ${err.message}`, 'error');
+            }
+        }
+
+        async function doNetworkError() {
+            logToBox('error-log', 'Attempting request to invalid host…', 'info');
+            try {
+                await fetch('https://this-host-does-not-exist-vwo-qa.xyz/api');
+                logToBox('error-log', 'Success (unexpected)', 'success');
+            } catch (err) {
+                logToBox('error-log', `❌ Network Error: ${err.message}`, 'error');
+            }
+        }
+
+        // ===== Polling =====
+        let pollInterval = null, pollCount = 0;
+        function startPolling() {
+            if (pollInterval) return;
+            document.getElementById('poll-start-btn').disabled = true;
+            document.getElementById('poll-stop-btn').disabled = false;
+            document.getElementById('poll-status').textContent = 'Polling every 3 seconds…';
+            pollInterval = setInterval(async () => {
+                pollCount++;
+                const id = Math.floor(Math.random() * 100) + 1;
+                try {
+                    const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+                    const data = await res.json();
+                    logToBox('poll-log', `Poll #${pollCount}: Got post "${data.title?.slice(0, 40)}…"`, 'success');
+                } catch (err) {
+                    logToBox('poll-log', `Poll #${pollCount}: Error – ${err.message}`, 'error');
+                }
+            }, 3000);
+            logToBox('poll-log', 'Polling started', 'info');
+        }
+        function stopPolling() {
+            clearInterval(pollInterval); pollInterval = null;
+            document.getElementById('poll-start-btn').disabled = false;
+            document.getElementById('poll-stop-btn').disabled = true;
+            document.getElementById('poll-status').textContent = 'Polling stopped';
+            logToBox('poll-log', 'Polling stopped', 'info');
+        }
+
+        // ===== Async Content Loading =====
+        async function loadPosts() {
+            const loading = document.getElementById('async-loading');
+            const content = document.getElementById('async-content');
+            loading.style.display = 'block'; content.innerHTML = '';
+            try {
+                const res = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5');
+                const posts = await res.json();
+                loading.style.display = 'none';
+                content.innerHTML = posts.map(p => `
+      <div class="card" style="margin-bottom:10px" id="post-${p.id}" data-testid="post-${p.id}">
+        <h3 style="font-size:14px">${p.title}</h3>
+        <p style="font-size:13px;color:var(--text-muted)">${p.body}</p>
+        <span class="badge badge-primary" style="margin-top:6px">Post #${p.id}</span>
+      </div>`).join('');
+            } catch (err) {
+                loading.style.display = 'none';
+                content.innerHTML = `<div class="alert alert-danger">Error: ${err.message}</div>`;
+            }
+        }
+
+        // ===== Fetch with Headers =====
+        async function doFetchWithHeaders() {
+            const key = document.getElementById('header-key').value;
+            const value = document.getElementById('header-value').value;
+            logToBox('headers-log', `Sending with header: ${key}: ${value}`, 'info');
+            try {
+                const res = await fetch('https://httpbin.org/headers', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        [key]: value
+                    }
+                });
+                const data = await res.json();
+                logToBox('headers-log', `Response headers echoed:\n${JSON.stringify(data.headers, null, 2)}`, 'success');
+            } catch (err) {
+                logToBox('headers-log', 'Error: ' + err.message, 'error');
+            }
+        }
+    </script>
+</body>
+
+</html>

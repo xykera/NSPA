@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VWO QA Test Site – Home</title>
+  <meta name="description" content="Comprehensive non-SPA website for VWO QA testing covering all element types.">
+  <script src="vwo-loader.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <nav class="site-nav" id="main-nav">
+    <span class="nav-brand">🧪 VWO QA Site</span>
+    <a href="index.html" onclick="return preserveQueryParams(this)">Home</a>
+    <a href="forms.html" onclick="return preserveQueryParams(this)">Forms</a>
+    <a href="dynamic-forms.html" onclick="return preserveQueryParams(this)">Dynamic Forms</a>
+    <a href="custom-elements.html" onclick="return preserveQueryParams(this)">Custom Elements</a>
+    <a href="shadow-dom.html" onclick="return preserveQueryParams(this)">Shadow DOM</a>
+    <a href="canvas.html" onclick="return preserveQueryParams(this)">Canvas</a>
+    <a href="tables.html" onclick="return preserveQueryParams(this)">Tables</a>
+    <a href="media.html" onclick="return preserveQueryParams(this)">Media</a>
+    <a href="interactive.html" onclick="return preserveQueryParams(this)">Interactive</a>
+    <a href="dom-events.html" onclick="return preserveQueryParams(this)">DOM Events</a>
+    <a href="storage.html" onclick="return preserveQueryParams(this)">Storage</a>
+    <a href="ajax.html" onclick="return preserveQueryParams(this)">AJAX</a>
+    <a href="accessibility.html" onclick="return preserveQueryParams(this)">Accessibility</a>
+  </nav>
+
+  <div class="page-header">
+    <h1>VWO QA Testing Website</h1>
+    <p>A comprehensive non-SPA site covering all element types, APIs, and patterns used by VWO clients.</p>
+  </div>
+
+  <main class="content">
+
+    <!-- Quick Actions -->
+    <div class="section">
+      <h2>Quick Test Targets</h2>
+      <p class="text-sm text-muted" style="margin-bottom:12px">Common click/interaction targets for VWO goal tracking
+        tests.</p>
+      <div class="btn-group">
+        <button class="btn btn-primary" id="cta-primary" onclick="trackClick('cta-primary')">Primary CTA</button>
+        <button class="btn btn-success" id="cta-signup" onclick="trackClick('cta-signup')">Sign Up</button>
+        <button class="btn btn-warning" id="cta-trial" onclick="trackClick('cta-trial')">Start Free Trial</button>
+        <button class="btn btn-danger" id="cta-delete" onclick="trackClick('cta-delete')">Delete Account</button>
+        <button class="btn btn-secondary" id="cta-learn" onclick="trackClick('cta-learn')">Learn More</button>
+      </div>
+      <div id="click-log" class="output-box mt-8" style="min-height:40px"></div>
+    </div>
+
+    <!-- Page Navigation Grid -->
+    <div class="section">
+      <h2>All Test Pages</h2>
+      <div class="card-grid">
+        <a href="forms.html" class="card" style="display:block;color:inherit">
+          <h3>📋 Standard Forms</h3>
+          <p>All HTML5 input types, validation, fieldsets, labels</p>
+        </a>
+        <a href="dynamic-forms.html" class="card" style="display:block;color:inherit">
+          <h3>⚡ Dynamic Forms</h3>
+          <p>Add/remove fields, conditional logic, multi-step wizard</p>
+        </a>
+        <a href="custom-elements.html" class="card" style="display:block;color:inherit">
+          <h3>🧩 Custom Elements</h3>
+          <p>Web Components, custom form controls, ElementInternals</p>
+        </a>
+        <a href="shadow-dom.html" class="card" style="display:block;color:inherit">
+          <h3>👤 Shadow DOM</h3>
+          <p>Open/closed shadow roots, slots, encapsulated styles</p>
+        </a>
+        <a href="canvas.html" class="card" style="display:block;color:inherit">
+          <h3>🎨 Canvas</h3>
+          <p>2D drawing, animation, mouse drawing, chart</p>
+        </a>
+        <a href="tables.html" class="card" style="display:block;color:inherit">
+          <h3>📊 Tables</h3>
+          <p>Sortable, paginated, editable, nested tables</p>
+        </a>
+        <a href="media.html" class="card" style="display:block;color:inherit">
+          <h3>🎬 Media</h3>
+          <p>Images, audio, video, SVG, iframe, picture</p>
+        </a>
+        <a href="interactive.html" class="card" style="display:block;color:inherit">
+          <h3>🖱️ Interactive</h3>
+          <p>Modals, tooltips, tabs, accordion, drag-drop, popover</p>
+        </a>
+        <a href="dom-events.html" class="card" style="display:block;color:inherit">
+          <h3>🔔 DOM Events</h3>
+          <p>Click, keyboard, scroll, mutation observer, custom events</p>
+        </a>
+        <a href="storage.html" class="card" style="display:block;color:inherit">
+          <h3>💾 Storage</h3>
+          <p>localStorage, sessionStorage, cookies, IndexedDB</p>
+        </a>
+        <a href="ajax.html" class="card" style="display:block;color:inherit">
+          <h3>🌐 AJAX</h3>
+          <p>Fetch, XHR, loading states, error handling, polling</p>
+        </a>
+        <a href="accessibility.html" class="card" style="display:block;color:inherit">
+          <h3>♿ Accessibility</h3>
+          <p>ARIA roles, live regions, focus management, skip links</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- Standard HTML Elements Showcase -->
+    <div class="section">
+      <h2>Standard HTML Elements</h2>
+
+      <h3>Typography</h3>
+      <h1>Heading 1</h1>
+      <h2>Heading 2</h2>
+      <h3>Heading 3</h3>
+      <h4>Heading 4</h4>
+      <h5>Heading 5</h5>
+      <h6>Heading 6</h6>
+      <p>Paragraph with <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <s>strikethrough</s>,
+        <code>inline code</code>, <mark>highlighted</mark>, <sub>sub</sub>, <sup>sup</sup> text.
+      </p>
+      <blockquote style="border-left:4px solid var(--border);padding-left:12px;color:var(--text-muted);margin:8px 0">
+        This is a blockquote element used for quoted content.</blockquote>
+      <pre
+        style="background:var(--bg);padding:10px;border-radius:4px;font-size:13px;overflow-x:auto"><code>const x = 42; // preformatted code block</code></pre>
+
+      <hr class="divider">
+
+      <h3>Lists</h3>
+      <div class="grid-3">
+        <div>
+          <strong>Unordered List</strong>
+          <ul style="margin:8px 0 0 20px;font-size:14px">
+            <li>Item Alpha</li>
+            <li>Item Beta
+              <ul>
+                <li>Nested Item 1</li>
+                <li>Nested Item 2</li>
+              </ul>
+            </li>
+            <li>Item Gamma</li>
+          </ul>
+        </div>
+        <div>
+          <strong>Ordered List</strong>
+          <ol style="margin:8px 0 0 20px;font-size:14px">
+            <li>First Step</li>
+            <li>Second Step</li>
+            <li>Third Step</li>
+          </ol>
+        </div>
+        <div>
+          <strong>Definition List</strong>
+          <dl style="margin:8px 0 0 0;font-size:14px">
+            <dt style="font-weight:600">Term 1</dt>
+            <dd style="margin-left:16px;color:var(--text-muted)">Definition of term 1</dd>
+            <dt style="font-weight:600">Term 2</dt>
+            <dd style="margin-left:16px;color:var(--text-muted)">Definition of term 2</dd>
+          </dl>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <h3>Links &amp; Buttons</h3>
+      <div class="flex gap-8 flex-wrap items-center" style="margin-bottom:8px">
+        <a href="#" id="link-normal">Normal Link</a>
+        <a href="#" id="link-visited" style="color:purple">Visited Link</a>
+        <a href="https://vwo.com" target="_blank" rel="noopener" id="link-external">External Link ↗</a>
+        <a href="mailto:test@example.com" id="link-email">Email Link</a>
+        <a href="tel:+1234567890" id="link-tel">Tel Link</a>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" id="btn-primary-home">Primary</button>
+        <button class="btn btn-secondary" id="btn-secondary-home">Secondary</button>
+        <button class="btn btn-success" id="btn-success-home">Success</button>
+        <button class="btn btn-danger" id="btn-danger-home">Danger</button>
+        <button class="btn btn-warning" id="btn-warning-home">Warning</button>
+        <button class="btn btn-sm" id="btn-small-home">Small</button>
+        <button class="btn btn-lg btn-primary" id="btn-large-home">Large</button>
+        <button class="btn btn-primary" id="btn-disabled-home" disabled>Disabled</button>
+      </div>
+
+      <hr class="divider">
+
+      <h3>Inline Elements</h3>
+      <p style="font-size:14px">
+        <abbr title="Visual Website Optimizer">VWO</abbr> ·
+        <cite>Citation text</cite> ·
+        <kbd>Ctrl+C</kbd> ·
+        <samp>Sample output</samp> ·
+        <var>variable</var> ·
+        <time datetime="2026-02-18">Feb 18, 2026</time> ·
+        <span id="inline-span" data-testid="span-element">Span element</span>
+      </p>
+
+      <hr class="divider">
+
+      <h3>Progress &amp; Meter</h3>
+      <div class="grid-2">
+        <div>
+          <label style="font-size:13px;font-weight:600">Progress (native)</label>
+          <progress id="progress-native" value="65" max="100" style="width:100%;margin-top:6px"></progress>
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600">Meter</label>
+          <meter id="meter-element" value="0.7" min="0" max="1" low="0.3" high="0.8" optimum="0.9"
+            style="width:100%;margin-top:6px"></meter>
+        </div>
+      </div>
+    </div>
+
+    <!-- Badges & Alerts -->
+    <div class="section">
+      <h2>Badges &amp; Alerts</h2>
+      <div class="flex gap-8 flex-wrap" style="margin-bottom:12px">
+        <span class="badge badge-primary">Primary</span>
+        <span class="badge badge-success">Success</span>
+        <span class="badge badge-danger">Danger</span>
+        <span class="badge badge-warning">Warning</span>
+      </div>
+      <div class="alert alert-info" id="alert-info" role="alert">ℹ️ This is an info alert message.</div>
+      <div class="alert alert-success" id="alert-success" role="alert">✅ This is a success alert message.</div>
+      <div class="alert alert-warning" id="alert-warning" role="alert">⚠️ This is a warning alert message.</div>
+      <div class="alert alert-danger" id="alert-danger" role="alert">❌ This is a danger alert message.</div>
+    </div>
+
+    <!-- Data Attributes & IDs -->
+    <div class="section">
+      <h2>Data Attributes &amp; Identifiers</h2>
+      <p class="text-sm text-muted" style="margin-bottom:12px">Elements with various data-* attributes for VWO selector
+        testing.</p>
+      <div class="flex gap-8 flex-wrap">
+        <div id="data-elem-1" data-vwo="target-1" data-category="product" data-price="99" class="card"
+          style="min-width:140px">
+          <h3>Product A</h3>
+          <p>data-vwo="target-1"</p>
+        </div>
+        <div id="data-elem-2" data-vwo="target-2" data-category="service" data-price="199" class="card"
+          style="min-width:140px">
+          <h3>Product B</h3>
+          <p>data-vwo="target-2"</p>
+        </div>
+        <div id="data-elem-3" data-vwo="target-3" data-category="product" data-price="49" class="card"
+          style="min-width:140px">
+          <h3>Product C</h3>
+          <p>data-vwo="target-3"</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="main.js"></script>
+  <script>
+    function trackClick(id) {
+      logToBox('click-log', 'Clicked: ' + id, 'success');
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWO QA – Storage</title>
+    <script src="vwo-loader.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <nav class="site-nav">
+        <span class="nav-brand">🧪 VWO QA Site</span>
+        <a href="index.html" onclick="return preserveQueryParams(this)">Home</a>
+        <a href="forms.html" onclick="return preserveQueryParams(this)">Forms</a>
+        <a href="dynamic-forms.html" onclick="return preserveQueryParams(this)">Dynamic Forms</a>
+        <a href="custom-elements.html" onclick="return preserveQueryParams(this)">Custom Elements</a>
+        <a href="shadow-dom.html" onclick="return preserveQueryParams(this)">Shadow DOM</a>
+        <a href="canvas.html" onclick="return preserveQueryParams(this)">Canvas</a>
+        <a href="tables.html" onclick="return preserveQueryParams(this)">Tables</a>
+        <a href="media.html" onclick="return preserveQueryParams(this)">Media</a>
+        <a href="interactive.html" onclick="return preserveQueryParams(this)">Interactive</a>
+        <a href="dom-events.html" onclick="return preserveQueryParams(this)">DOM Events</a>
+        <a href="storage.html" onclick="return preserveQueryParams(this)">Storage</a>
+        <a href="ajax.html" onclick="return preserveQueryParams(this)">AJAX</a>
+        <a href="accessibility.html" onclick="return preserveQueryParams(this)">Accessibility</a>
+    </nav>
+
+    <div class="page-header">
+        <h1>Storage APIs</h1>
+        <p>localStorage, sessionStorage, Cookies, and IndexedDB — read, write, delete, and clear operations.</p>
+    </div>
+
+    <main class="content">
+
+        <!-- localStorage -->
+        <div class="section">
+            <h2>localStorage</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="ls-key">Key</label>
+                    <input type="text" id="ls-key" placeholder="key" value="vwo_test_key" data-testid="ls-key">
+                </div>
+                <div class="form-group">
+                    <label for="ls-value">Value</label>
+                    <input type="text" id="ls-value" placeholder="value" value="hello_world" data-testid="ls-value">
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm" id="ls-set-btn" onclick="lsSet()">Set</button>
+                <button class="btn btn-secondary btn-sm" id="ls-get-btn" onclick="lsGet()">Get</button>
+                <button class="btn btn-danger btn-sm" id="ls-delete-btn" onclick="lsDelete()">Delete Key</button>
+                <button class="btn btn-warning btn-sm" id="ls-clear-btn" onclick="lsClear()">Clear All</button>
+                <button class="btn btn-secondary btn-sm" id="ls-list-btn" onclick="lsList()">List All</button>
+            </div>
+            <div class="output-box mt-8" id="ls-log" style="min-height:80px"></div>
+            <div style="margin-top:12px">
+                <h3>Current localStorage Contents</h3>
+                <div id="ls-display"
+                    style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:12px;font-size:13px;font-family:monospace;min-height:40px">
+                </div>
+            </div>
+        </div>
+
+        <!-- sessionStorage -->
+        <div class="section">
+            <h2>sessionStorage</h2>
+            <p class="text-sm text-muted" style="margin-bottom:10px">Data is cleared when the browser tab is closed.</p>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="ss-key">Key</label>
+                    <input type="text" id="ss-key" placeholder="key" value="session_user" data-testid="ss-key">
+                </div>
+                <div class="form-group">
+                    <label for="ss-value">Value</label>
+                    <input type="text" id="ss-value" placeholder="value" value="john_doe" data-testid="ss-value">
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm" id="ss-set-btn" onclick="ssSet()">Set</button>
+                <button class="btn btn-secondary btn-sm" id="ss-get-btn" onclick="ssGet()">Get</button>
+                <button class="btn btn-danger btn-sm" id="ss-delete-btn" onclick="ssDelete()">Delete Key</button>
+                <button class="btn btn-warning btn-sm" id="ss-clear-btn" onclick="ssClear()">Clear All</button>
+            </div>
+            <div class="output-box mt-8" id="ss-log" style="min-height:60px"></div>
+        </div>
+
+        <!-- Cookies -->
+        <div class="section">
+            <h2>Cookies</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="ck-name">Name</label>
+                    <input type="text" id="ck-name" placeholder="cookie_name" value="vwo_user_id" data-testid="ck-name">
+                </div>
+                <div class="form-group">
+                    <label for="ck-value">Value</label>
+                    <input type="text" id="ck-value" placeholder="cookie_value" value="usr_12345"
+                        data-testid="ck-value">
+                </div>
+                <div class="form-group">
+                    <label for="ck-days">Expires (days)</label>
+                    <input type="number" id="ck-days" value="7" min="0" max="365" data-testid="ck-days">
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm" id="ck-set-btn" onclick="ckSet()">Set Cookie</button>
+                <button class="btn btn-secondary btn-sm" id="ck-get-btn" onclick="ckGet()">Get Cookie</button>
+                <button class="btn btn-danger btn-sm" id="ck-delete-btn" onclick="ckDelete()">Delete Cookie</button>
+                <button class="btn btn-secondary btn-sm" id="ck-list-btn" onclick="ckList()">List All Cookies</button>
+            </div>
+            <div class="output-box mt-8" id="ck-log" style="min-height:80px"></div>
+            <div style="margin-top:12px">
+                <h3>Pre-set Test Cookies</h3>
+                <div class="btn-group">
+                    <button class="btn btn-secondary btn-sm" onclick="setTestCookies()">Set Test Cookies</button>
+                    <button class="btn btn-danger btn-sm" onclick="clearTestCookies()">Clear Test Cookies</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- IndexedDB -->
+        <div class="section">
+            <h2>IndexedDB</h2>
+            <p class="text-sm text-muted" style="margin-bottom:10px">A low-level API for client-side storage of
+                structured data.</p>
+            <div id="idb-status" class="alert alert-info" style="margin-bottom:12px">Initializing IndexedDB…</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="idb-id">ID</label>
+                    <input type="number" id="idb-id" value="1" min="1" data-testid="idb-id">
+                </div>
+                <div class="form-group">
+                    <label for="idb-name">Name</label>
+                    <input type="text" id="idb-name" placeholder="Product name" value="Widget A" data-testid="idb-name">
+                </div>
+                <div class="form-group">
+                    <label for="idb-price">Price</label>
+                    <input type="number" id="idb-price" value="29.99" step="0.01" data-testid="idb-price">
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm" id="idb-add-btn" onclick="idbAdd()">Add Record</button>
+                <button class="btn btn-secondary btn-sm" id="idb-get-btn" onclick="idbGet()">Get by ID</button>
+                <button class="btn btn-warning btn-sm" id="idb-update-btn" onclick="idbUpdate()">Update</button>
+                <button class="btn btn-danger btn-sm" id="idb-delete-btn" onclick="idbDelete()">Delete by ID</button>
+                <button class="btn btn-secondary btn-sm" id="idb-list-btn" onclick="idbList()">List All</button>
+                <button class="btn btn-danger btn-sm" id="idb-clear-btn" onclick="idbClear()">Clear Store</button>
+            </div>
+            <div class="output-box mt-8" id="idb-log" style="min-height:100px"></div>
+        </div>
+
+        <!-- Storage Events -->
+        <div class="section">
+            <h2>Storage Event (Cross-tab)</h2>
+            <p class="text-sm text-muted" style="margin-bottom:10px">The <code>storage</code> event fires in OTHER tabs
+                when localStorage changes. Open this page in two tabs to test.</p>
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm" onclick="triggerStorageEvent()">Write to localStorage (triggers
+                    event in other tabs)</button>
+            </div>
+            <div class="output-box mt-8" id="storage-event-log" style="min-height:60px">Waiting for storage events from
+                other tabs…</div>
+        </div>
+
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+        // ===== localStorage =====
+        function lsDisplay() {
+            const display = document.getElementById('ls-display');
+            if (localStorage.length === 0) { display.textContent = '(empty)'; return; }
+            const items = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                items.push(`${k}: ${localStorage.getItem(k)}`);
+            }
+            display.textContent = items.join('\n');
+        }
+
+        function lsSet() {
+            const k = document.getElementById('ls-key').value.trim();
+            const v = document.getElementById('ls-value').value;
+            if (!k) { logToBox('ls-log', 'Key cannot be empty', 'error'); return; }
+            localStorage.setItem(k, v);
+            logToBox('ls-log', `Set: "${k}" = "${v}"`, 'success');
+            lsDisplay();
+        }
+        function lsGet() {
+            const k = document.getElementById('ls-key').value.trim();
+            const v = localStorage.getItem(k);
+            logToBox('ls-log', v !== null ? `Get: "${k}" = "${v}"` : `Key "${k}" not found`, v !== null ? 'success' : 'error');
+        }
+        function lsDelete() {
+            const k = document.getElementById('ls-key').value.trim();
+            localStorage.removeItem(k);
+            logToBox('ls-log', `Deleted: "${k}"`, 'info');
+            lsDisplay();
+        }
+        function lsClear() {
+            localStorage.clear();
+            logToBox('ls-log', 'localStorage cleared', 'info');
+            lsDisplay();
+        }
+        function lsList() {
+            if (localStorage.length === 0) { logToBox('ls-log', 'localStorage is empty', 'info'); return; }
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                logToBox('ls-log', `[${i}] "${k}" = "${localStorage.getItem(k)}"`, 'info');
+            }
+        }
+        lsDisplay();
+
+        // ===== sessionStorage =====
+        function ssSet() {
+            const k = document.getElementById('ss-key').value.trim();
+            const v = document.getElementById('ss-value').value;
+            sessionStorage.setItem(k, v);
+            logToBox('ss-log', `Set: "${k}" = "${v}"`, 'success');
+        }
+        function ssGet() {
+            const k = document.getElementById('ss-key').value.trim();
+            const v = sessionStorage.getItem(k);
+            logToBox('ss-log', v !== null ? `Get: "${k}" = "${v}"` : `Key "${k}" not found`, v !== null ? 'success' : 'error');
+        }
+        function ssDelete() {
+            const k = document.getElementById('ss-key').value.trim();
+            sessionStorage.removeItem(k);
+            logToBox('ss-log', `Deleted: "${k}"`, 'info');
+        }
+        function ssClear() {
+            sessionStorage.clear();
+            logToBox('ss-log', 'sessionStorage cleared', 'info');
+        }
+
+        // ===== Cookies =====
+        function ckSet() {
+            const name = document.getElementById('ck-name').value.trim();
+            const value = document.getElementById('ck-value').value;
+            const days = parseInt(document.getElementById('ck-days').value);
+            Cookie.set(name, value, days);
+            logToBox('ck-log', `Set cookie: "${name}" = "${value}" (expires in ${days} days)`, 'success');
+        }
+        function ckGet() {
+            const name = document.getElementById('ck-name').value.trim();
+            const v = Cookie.get(name);
+            logToBox('ck-log', v !== null ? `Get: "${name}" = "${v}"` : `Cookie "${name}" not found`, v !== null ? 'success' : 'error');
+        }
+        function ckDelete() {
+            const name = document.getElementById('ck-name').value.trim();
+            Cookie.delete(name);
+            logToBox('ck-log', `Deleted cookie: "${name}"`, 'info');
+        }
+        function ckList() {
+            const cookies = document.cookie;
+            if (!cookies) { logToBox('ck-log', 'No cookies found', 'info'); return; }
+            cookies.split('; ').forEach(c => logToBox('ck-log', c, 'info'));
+        }
+        function setTestCookies() {
+            Cookie.set('vwo_visitor_id', 'vis_' + Math.random().toString(36).substr(2, 9), 30);
+            Cookie.set('vwo_session', 'sess_' + Date.now(), 1);
+            Cookie.set('vwo_ab_test', 'variant_B', 7);
+            Cookie.set('vwo_goals', 'signup,purchase', 7);
+            logToBox('ck-log', 'Test cookies set: vwo_visitor_id, vwo_session, vwo_ab_test, vwo_goals', 'success');
+        }
+        function clearTestCookies() {
+            ['vwo_visitor_id', 'vwo_session', 'vwo_ab_test', 'vwo_goals'].forEach(n => Cookie.delete(n));
+            logToBox('ck-log', 'Test cookies cleared', 'info');
+        }
+
+        // ===== IndexedDB =====
+        let db;
+        const DB_NAME = 'vwo_qa_db', DB_VERSION = 1, STORE_NAME = 'products';
+
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = e => {
+            db = e.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                store.createIndex('name', 'name', { unique: false });
+            }
+        };
+        request.onsuccess = e => {
+            db = e.target.result;
+            document.getElementById('idb-status').className = 'alert alert-success';
+            document.getElementById('idb-status').textContent = '✅ IndexedDB initialized: ' + DB_NAME + ' v' + DB_VERSION;
+            logToBox('idb-log', 'IndexedDB ready', 'success');
+        };
+        request.onerror = e => {
+            document.getElementById('idb-status').className = 'alert alert-danger';
+            document.getElementById('idb-status').textContent = '❌ IndexedDB error: ' + e.target.error;
+        };
+
+        function idbTx(mode) { return db.transaction(STORE_NAME, mode).objectStore(STORE_NAME); }
+
+        function idbAdd() {
+            const record = { id: parseInt(document.getElementById('idb-id').value), name: document.getElementById('idb-name').value, price: parseFloat(document.getElementById('idb-price').value) };
+            const req = idbTx('readwrite').add(record);
+            req.onsuccess = () => logToBox('idb-log', `Added: ${JSON.stringify(record)}`, 'success');
+            req.onerror = e => logToBox('idb-log', `Error: ${e.target.error}`, 'error');
+        }
+        function idbGet() {
+            const id = parseInt(document.getElementById('idb-id').value);
+            const req = idbTx('readonly').get(id);
+            req.onsuccess = e => logToBox('idb-log', e.target.result ? `Got: ${JSON.stringify(e.target.result)}` : `ID ${id} not found`, e.target.result ? 'success' : 'error');
+        }
+        function idbUpdate() {
+            const record = { id: parseInt(document.getElementById('idb-id').value), name: document.getElementById('idb-name').value, price: parseFloat(document.getElementById('idb-price').value) };
+            const req = idbTx('readwrite').put(record);
+            req.onsuccess = () => logToBox('idb-log', `Updated: ${JSON.stringify(record)}`, 'success');
+            req.onerror = e => logToBox('idb-log', `Error: ${e.target.error}`, 'error');
+        }
+        function idbDelete() {
+            const id = parseInt(document.getElementById('idb-id').value);
+            const req = idbTx('readwrite').delete(id);
+            req.onsuccess = () => logToBox('idb-log', `Deleted ID: ${id}`, 'info');
+        }
+        function idbList() {
+            const req = idbTx('readonly').getAll();
+            req.onsuccess = e => {
+                const records = e.target.result;
+                if (!records.length) { logToBox('idb-log', 'Store is empty', 'info'); return; }
+                records.forEach(r => logToBox('idb-log', JSON.stringify(r), 'info'));
+            };
+        }
+        function idbClear() {
+            const req = idbTx('readwrite').clear();
+            req.onsuccess = () => logToBox('idb-log', 'Store cleared', 'info');
+        }
+
+        // ===== Storage Event =====
+        let storageEventCount = 0;
+        function triggerStorageEvent() {
+            storageEventCount++;
+            localStorage.setItem('vwo_cross_tab_test', 'event_' + storageEventCount + '_at_' + Date.now());
+            logToBox('storage-event-log', 'Wrote to localStorage (check other tabs)', 'info');
+        }
+        window.addEventListener('storage', e => {
+            logToBox('storage-event-log', `Storage event! key="${e.key}" oldValue="${e.oldValue}" newValue="${e.newValue}"`, 'success');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWO QA – Canvas</title>
+    <script src="vwo-loader.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <nav class="site-nav">
+        <span class="nav-brand">🧪 VWO QA Site</span>
+        <a href="index.html" onclick="return preserveQueryParams(this)">Home</a>
+        <a href="forms.html" onclick="return preserveQueryParams(this)">Forms</a>
+        <a href="dynamic-forms.html" onclick="return preserveQueryParams(this)">Dynamic Forms</a>
+        <a href="custom-elements.html" onclick="return preserveQueryParams(this)">Custom Elements</a>
+        <a href="shadow-dom.html" onclick="return preserveQueryParams(this)">Shadow DOM</a>
+        <a href="canvas.html" onclick="return preserveQueryParams(this)">Canvas</a>
+        <a href="tables.html" onclick="return preserveQueryParams(this)">Tables</a>
+        <a href="media.html" onclick="return preserveQueryParams(this)">Media</a>
+        <a href="interactive.html" onclick="return preserveQueryParams(this)">Interactive</a>
+        <a href="dom-events.html" onclick="return preserveQueryParams(this)">DOM Events</a>
+        <a href="storage.html" onclick="return preserveQueryParams(this)">Storage</a>
+        <a href="ajax.html" onclick="return preserveQueryParams(this)">AJAX</a>
+        <a href="accessibility.html" onclick="return preserveQueryParams(this)">Accessibility</a>
+    </nav>
+
+    <div class="page-header">
+        <h1>Canvas</h1>
+        <p>HTML5 Canvas 2D API — static drawing, animation, mouse drawing, bar chart, and image manipulation.</p>
+    </div>
+
+    <main class="content">
+
+        <!-- Static Drawing -->
+        <div class="section">
+            <h2>Static Drawing (Shapes, Text, Gradients)</h2>
+            <canvas id="canvas-static" width="700" height="200"
+                style="border:1px solid var(--border);border-radius:var(--radius);max-width:100%"
+                data-testid="canvas-static"></canvas>
+            <div class="btn-group mt-8">
+                <button class="btn btn-primary btn-sm" onclick="drawStatic()">Redraw</button>
+                <button class="btn btn-secondary btn-sm" onclick="clearCanvas('canvas-static')">Clear</button>
+            </div>
+        </div>
+
+        <!-- Animated Canvas -->
+        <div class="section">
+            <h2>Animation – Bouncing Ball</h2>
+            <canvas id="canvas-anim" width="700" height="200"
+                style="border:1px solid var(--border);border-radius:var(--radius);max-width:100%;background:#0f172a"
+                data-testid="canvas-anim"></canvas>
+            <div class="btn-group mt-8">
+                <button class="btn btn-primary btn-sm" id="anim-start-btn" onclick="startAnim()">▶ Start</button>
+                <button class="btn btn-secondary btn-sm" id="anim-stop-btn" onclick="stopAnim()">⏸ Pause</button>
+                <button class="btn btn-danger btn-sm" onclick="resetAnim()">↺ Reset</button>
+            </div>
+        </div>
+
+        <!-- Mouse Drawing -->
+        <div class="section">
+            <h2>Mouse Drawing (Freehand)</h2>
+            <div class="flex gap-8 flex-wrap items-center" style="margin-bottom:10px">
+                <label style="font-size:13px;font-weight:600">Color:</label>
+                <input type="color" id="draw-color" value="#2563eb"
+                    style="width:40px;height:32px;padding:2px;border:1px solid var(--border);border-radius:4px">
+                <label style="font-size:13px;font-weight:600">Size:</label>
+                <input type="range" id="draw-size" min="1" max="30" value="4" style="width:100px">
+                <span id="draw-size-val" style="font-size:13px">4px</span>
+                <button class="btn btn-secondary btn-sm" onclick="clearCanvas('canvas-draw')">Clear</button>
+                <button class="btn btn-primary btn-sm" onclick="downloadCanvas()">Download</button>
+            </div>
+            <canvas id="canvas-draw" width="700" height="300"
+                style="border:1px solid var(--border);border-radius:var(--radius);cursor:crosshair;max-width:100%;background:#fff;touch-action:none"
+                data-testid="canvas-draw"></canvas>
+        </div>
+
+        <!-- Bar Chart -->
+        <div class="section">
+            <h2>Bar Chart</h2>
+            <canvas id="canvas-chart" width="700" height="300"
+                style="border:1px solid var(--border);border-radius:var(--radius);max-width:100%"
+                data-testid="canvas-chart"></canvas>
+            <div class="btn-group mt-8">
+                <button class="btn btn-primary btn-sm" onclick="drawChart()">Redraw</button>
+                <button class="btn btn-secondary btn-sm" onclick="randomizeChart()">Randomize Data</button>
+            </div>
+        </div>
+
+        <!-- Image Manipulation -->
+        <div class="section">
+            <h2>Image Manipulation</h2>
+            <p class="text-sm text-muted" style="margin-bottom:10px">Draw an image on canvas and apply filters.</p>
+            <div class="btn-group" style="margin-bottom:10px">
+                <button class="btn btn-secondary btn-sm" onclick="applyFilter('none')">Original</button>
+                <button class="btn btn-secondary btn-sm" onclick="applyFilter('grayscale')">Grayscale</button>
+                <button class="btn btn-secondary btn-sm" onclick="applyFilter('invert')">Invert</button>
+                <button class="btn btn-secondary btn-sm" onclick="applyFilter('sepia')">Sepia</button>
+                <button class="btn btn-secondary btn-sm" onclick="applyFilter('blur')">Blur</button>
+            </div>
+            <canvas id="canvas-image" width="700" height="250"
+                style="border:1px solid var(--border);border-radius:var(--radius);max-width:100%"
+                data-testid="canvas-image"></canvas>
+        </div>
+
+        <!-- Pixel Manipulation -->
+        <div class="section">
+            <h2>Pixel Data Manipulation</h2>
+            <p class="text-sm text-muted" style="margin-bottom:10px">Direct pixel manipulation using
+                <code>ImageData</code>.
+            </p>
+            <canvas id="canvas-pixels" width="400" height="200"
+                style="border:1px solid var(--border);border-radius:var(--radius)" data-testid="canvas-pixels"></canvas>
+            <div class="btn-group mt-8">
+                <button class="btn btn-secondary btn-sm" onclick="drawPixelNoise()">Noise</button>
+                <button class="btn btn-secondary btn-sm" onclick="drawPixelGradient()">Gradient</button>
+                <button class="btn btn-secondary btn-sm" onclick="drawCheckerboard()">Checkerboard</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+        // ===== Helpers =====
+        function getCtx(id) { return document.getElementById(id).getContext('2d'); }
+        function clearCanvas(id) {
+            const c = document.getElementById(id);
+            c.getContext('2d').clearRect(0, 0, c.width, c.height);
+        }
+
+        // ===== Static Drawing =====
+        function drawStatic() {
+            const canvas = document.getElementById('canvas-static');
+            const ctx = getCtx('canvas-static');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Background gradient
+            const bg = ctx.createLinearGradient(0, 0, canvas.width, 0);
+            bg.addColorStop(0, '#f8fafc'); bg.addColorStop(1, '#e2e8f0');
+            ctx.fillStyle = bg; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Rectangle
+            ctx.fillStyle = '#3b82f6'; ctx.fillRect(20, 30, 100, 60);
+            ctx.strokeStyle = '#1d4ed8'; ctx.lineWidth = 2; ctx.strokeRect(20, 30, 100, 60);
+
+            // Circle
+            ctx.beginPath(); ctx.arc(200, 60, 45, 0, Math.PI * 2);
+            const radGrad = ctx.createRadialGradient(200, 60, 5, 200, 60, 45);
+            radGrad.addColorStop(0, '#fbbf24'); radGrad.addColorStop(1, '#d97706');
+            ctx.fillStyle = radGrad; ctx.fill();
+            ctx.strokeStyle = '#92400e'; ctx.stroke();
+
+            // Triangle
+            ctx.beginPath(); ctx.moveTo(310, 110); ctx.lineTo(360, 20); ctx.lineTo(410, 110); ctx.closePath();
+            ctx.fillStyle = '#22c55e'; ctx.fill(); ctx.strokeStyle = '#15803d'; ctx.stroke();
+
+            // Line
+            ctx.beginPath(); ctx.moveTo(440, 20); ctx.lineTo(540, 110);
+            ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.stroke();
+
+            // Bezier curve
+            ctx.beginPath(); ctx.moveTo(560, 110); ctx.bezierCurveTo(580, 20, 640, 20, 660, 110);
+            ctx.strokeStyle = '#8b5cf6'; ctx.lineWidth = 3; ctx.stroke();
+
+            // Text
+            ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Arial';
+            ctx.fillText('Rect', 55, 68);
+            ctx.fillText('Circle', 175, 65);
+            ctx.fillText('Triangle', 330, 75);
+            ctx.fillText('Line', 470, 70);
+            ctx.fillText('Bezier', 585, 70);
+
+            // Shadow text
+            ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 4; ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2;
+            ctx.fillStyle = '#1e293b'; ctx.font = 'bold 16px Arial';
+            ctx.fillText('Canvas 2D Drawing Demo', 20, 160);
+            ctx.shadowColor = 'transparent';
+
+            // Dashed border
+            ctx.setLineDash([5, 3]); ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1;
+            ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
+            ctx.setLineDash([]);
+        }
+        drawStatic();
+
+        // ===== Animation =====
+        let animFrame, animRunning = false;
+        const ball = { x: 50, y: 100, vx: 3, vy: 2, r: 15, color: '#60a5fa' };
+
+        function drawAnimFrame() {
+            const canvas = document.getElementById('canvas-anim');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Trail
+            ctx.fillStyle = 'rgba(15,23,42,0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Ball
+            ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+            const g = ctx.createRadialGradient(ball.x - 4, ball.y - 4, 2, ball.x, ball.y, ball.r);
+            g.addColorStop(0, '#fff'); g.addColorStop(1, ball.color);
+            ctx.fillStyle = g; ctx.fill();
+
+            ball.x += ball.vx; ball.y += ball.vy;
+            if (ball.x + ball.r > canvas.width || ball.x - ball.r < 0) { ball.vx *= -1; ball.color = `hsl(${Math.random() * 360},80%,65%)`; }
+            if (ball.y + ball.r > canvas.height || ball.y - ball.r < 0) { ball.vy *= -1; ball.color = `hsl(${Math.random() * 360},80%,65%)`; }
+
+            if (animRunning) animFrame = requestAnimationFrame(drawAnimFrame);
+        }
+
+        function startAnim() { if (!animRunning) { animRunning = true; drawAnimFrame(); } }
+        function stopAnim() { animRunning = false; cancelAnimationFrame(animFrame); }
+        function resetAnim() { stopAnim(); ball.x = 50; ball.y = 100; ball.vx = 3; ball.vy = 2; clearCanvas('canvas-anim'); }
+        startAnim();
+
+        // ===== Mouse Drawing =====
+        const drawCanvas = document.getElementById('canvas-draw');
+        const drawCtx = drawCanvas.getContext('2d');
+        let drawing = false, lastX = 0, lastY = 0;
+
+        function getPos(e) {
+            const rect = drawCanvas.getBoundingClientRect();
+            const scaleX = drawCanvas.width / rect.width;
+            const scaleY = drawCanvas.height / rect.height;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+        }
+
+        drawCanvas.addEventListener('mousedown', e => { drawing = true; const p = getPos(e); lastX = p.x; lastY = p.y; });
+        drawCanvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const p = getPos(e); lastX = p.x; lastY = p.y; });
+        drawCanvas.addEventListener('mousemove', e => {
+            if (!drawing) return;
+            const p = getPos(e);
+            drawCtx.beginPath();
+            drawCtx.moveTo(lastX, lastY); drawCtx.lineTo(p.x, p.y);
+            drawCtx.strokeStyle = document.getElementById('draw-color').value;
+            drawCtx.lineWidth = document.getElementById('draw-size').value;
+            drawCtx.lineCap = 'round'; drawCtx.lineJoin = 'round'; drawCtx.stroke();
+            lastX = p.x; lastY = p.y;
+        });
+        drawCanvas.addEventListener('touchmove', e => { e.preventDefault(); drawCanvas.dispatchEvent(new MouseEvent('mousemove', { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY })); });
+        drawCanvas.addEventListener('mouseup', () => drawing = false);
+        drawCanvas.addEventListener('touchend', () => drawing = false);
+        drawCanvas.addEventListener('mouseleave', () => drawing = false);
+
+        document.getElementById('draw-size').addEventListener('input', function () {
+            document.getElementById('draw-size-val').textContent = this.value + 'px';
+        });
+
+        function downloadCanvas() {
+            const link = document.createElement('a');
+            link.download = 'drawing.png';
+            link.href = drawCanvas.toDataURL();
+            link.click();
+        }
+
+        // ===== Bar Chart =====
+        let chartData = [
+            { label: 'Jan', value: 65 }, { label: 'Feb', value: 82 }, { label: 'Mar', value: 54 },
+            { label: 'Apr', value: 91 }, { label: 'May', value: 73 }, { label: 'Jun', value: 88 },
+            { label: 'Jul', value: 61 }, { label: 'Aug', value: 95 }
+        ];
+        const chartColors = ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#f97316'];
+
+        function drawChart() {
+            const canvas = document.getElementById('canvas-chart');
+            const ctx = canvas.getContext('2d');
+            const W = canvas.width, H = canvas.height;
+            const pad = { top: 30, right: 20, bottom: 50, left: 50 };
+            const chartW = W - pad.left - pad.right;
+            const chartH = H - pad.top - pad.bottom;
+            const maxVal = Math.max(...chartData.map(d => d.value)) * 1.1;
+            const barW = chartW / chartData.length * 0.6;
+            const gap = chartW / chartData.length;
+
+            ctx.clearRect(0, 0, W, H);
+
+            // Background
+            ctx.fillStyle = '#f8fafc'; ctx.fillRect(0, 0, W, H);
+
+            // Grid lines
+            ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+            for (let i = 0; i <= 5; i++) {
+                const y = pad.top + chartH - (i / 5) * chartH;
+                ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+                ctx.fillStyle = '#94a3b8'; ctx.font = '11px Arial'; ctx.textAlign = 'right';
+                ctx.fillText(Math.round((i / 5) * maxVal), pad.left - 6, y + 4);
+            }
+
+            // Bars
+            chartData.forEach((d, i) => {
+                const x = pad.left + i * gap + (gap - barW) / 2;
+                const barH = (d.value / maxVal) * chartH;
+                const y = pad.top + chartH - barH;
+
+                const grad = ctx.createLinearGradient(x, y, x, y + barH);
+                grad.addColorStop(0, chartColors[i % chartColors.length]);
+                grad.addColorStop(1, chartColors[i % chartColors.length] + '88');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.roundRect ? ctx.roundRect(x, y, barW, barH, [4, 4, 0, 0]) : ctx.rect(x, y, barW, barH);
+                ctx.fill();
+
+                // Value label
+                ctx.fillStyle = '#1e293b'; ctx.font = 'bold 12px Arial'; ctx.textAlign = 'center';
+                ctx.fillText(d.value, x + barW / 2, y - 6);
+
+                // X label
+                ctx.fillStyle = '#64748b'; ctx.font = '12px Arial';
+                ctx.fillText(d.label, x + barW / 2, H - pad.bottom + 18);
+            });
+
+            // Title
+            ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Arial'; ctx.textAlign = 'center';
+            ctx.fillText('Monthly Performance', W / 2, 18);
+        }
+        drawChart();
+
+        function randomizeChart() {
+            chartData = chartData.map(d => ({ ...d, value: Math.floor(Math.random() * 80) + 20 }));
+            drawChart();
+        }
+
+        // ===== Image Manipulation =====
+        function drawImageCanvas(filter) {
+            const canvas = document.getElementById('canvas-image');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw a colorful pattern as "image"
+            for (let x = 0; x < canvas.width; x += 20) {
+                for (let y = 0; y < canvas.height; y += 20) {
+                    ctx.fillStyle = `hsl(${(x + y) * 2 % 360}, 70%, 60%)`;
+                    ctx.fillRect(x, y, 20, 20);
+                }
+            }
+
+            // Add some text
+            ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.font = 'bold 20px Arial'; ctx.textAlign = 'center';
+            ctx.fillText('Sample Image Content', canvas.width / 2, canvas.height / 2);
+
+            if (filter !== 'none') {
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i + 1], b = data[i + 2];
+                    if (filter === 'grayscale') {
+                        const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                        data[i] = data[i + 1] = data[i + 2] = gray;
+                    } else if (filter === 'invert') {
+                        data[i] = 255 - r; data[i + 1] = 255 - g; data[i + 2] = 255 - b;
+                    } else if (filter === 'sepia') {
+                        data[i] = Math.min(255, r * 0.393 + g * 0.769 + b * 0.189);
+                        data[i + 1] = Math.min(255, r * 0.349 + g * 0.686 + b * 0.168);
+                        data[i + 2] = Math.min(255, r * 0.272 + g * 0.534 + b * 0.131);
+                    }
+                }
+                ctx.putImageData(imageData, 0, 0);
+            }
+
+            if (filter === 'blur') {
+                ctx.filter = 'blur(4px)';
+                const temp = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.putImageData(temp, 0, 0);
+                ctx.filter = 'none';
+            }
+        }
+        function applyFilter(f) { drawImageCanvas(f); }
+        drawImageCanvas('none');
+
+        // ===== Pixel Manipulation =====
+        function drawPixelNoise() {
+            const canvas = document.getElementById('canvas-pixels');
+            const ctx = canvas.getContext('2d');
+            const imgData = ctx.createImageData(canvas.width, canvas.height);
+            for (let i = 0; i < imgData.data.length; i += 4) {
+                const v = Math.random() * 255;
+                imgData.data[i] = v; imgData.data[i + 1] = v; imgData.data[i + 2] = v; imgData.data[i + 3] = 255;
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        function drawPixelGradient() {
+            const canvas = document.getElementById('canvas-pixels');
+            const ctx = canvas.getContext('2d');
+            const imgData = ctx.createImageData(canvas.width, canvas.height);
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
+                    const i = (y * canvas.width + x) * 4;
+                    imgData.data[i] = (x / canvas.width) * 255;
+                    imgData.data[i + 1] = (y / canvas.height) * 255;
+                    imgData.data[i + 2] = 128;
+                    imgData.data[i + 3] = 255;
+                }
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        function drawCheckerboard() {
+            const canvas = document.getElementById('canvas-pixels');
+            const ctx = canvas.getContext('2d');
+            const size = 20;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let y = 0; y < canvas.height; y += size) {
+                for (let x = 0; x < canvas.width; x += size) {
+                    ctx.fillStyle = ((x / size + y / size) % 2 === 0) ? '#1e293b' : '#f8fafc';
+                    ctx.fillRect(x, y, size, size);
+                }
+            }
+        }
+        drawPixelGradient();
+    </script>
+</body>
+
+</html>

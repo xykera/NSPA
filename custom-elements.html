@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWO QA – Custom Elements</title>
+    <script src="vwo-loader.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <nav class="site-nav">
+        <span class="nav-brand">🧪 VWO QA Site</span>
+        <a href="index.html" onclick="return preserveQueryParams(this)">Home</a>
+        <a href="forms.html" onclick="return preserveQueryParams(this)">Forms</a>
+        <a href="dynamic-forms.html" onclick="return preserveQueryParams(this)">Dynamic Forms</a>
+        <a href="custom-elements.html" onclick="return preserveQueryParams(this)">Custom Elements</a>
+        <a href="shadow-dom.html" onclick="return preserveQueryParams(this)">Shadow DOM</a>
+        <a href="canvas.html" onclick="return preserveQueryParams(this)">Canvas</a>
+        <a href="tables.html" onclick="return preserveQueryParams(this)">Tables</a>
+        <a href="media.html" onclick="return preserveQueryParams(this)">Media</a>
+        <a href="interactive.html" onclick="return preserveQueryParams(this)">Interactive</a>
+        <a href="dom-events.html" onclick="return preserveQueryParams(this)">DOM Events</a>
+        <a href="storage.html" onclick="return preserveQueryParams(this)">Storage</a>
+        <a href="ajax.html" onclick="return preserveQueryParams(this)">AJAX</a>
+        <a href="accessibility.html" onclick="return preserveQueryParams(this)">Accessibility</a>
+    </nav>
+
+    <div class="page-header">
+        <h1>Custom Elements (Web Components)</h1>
+        <p>Custom HTML elements using the Web Components API, including forms with custom controls.</p>
+    </div>
+
+    <main class="content">
+
+        <!-- Star Rating -->
+        <div class="section">
+            <h2>Star Rating Custom Element</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px"><code>&lt;star-rating&gt;</code> — a custom element
+                for rating input.</p>
+            <div class="form-group">
+                <label>Rate your experience:</label>
+                <star-rating id="rating-1" value="0" max="5" data-testid="star-rating-1"></star-rating>
+                <div class="form-hint">Selected: <span id="rating-1-val">None</span></div>
+            </div>
+            <div class="form-group">
+                <label>Rate the product (read-only, preset 4):</label>
+                <star-rating id="rating-2" value="4" max="5" readonly data-testid="star-rating-2"></star-rating>
+            </div>
+            <div class="form-group">
+                <label>Rate out of 10:</label>
+                <star-rating id="rating-3" value="0" max="10" data-testid="star-rating-3"></star-rating>
+                <div class="form-hint">Selected: <span id="rating-3-val">None</span></div>
+            </div>
+        </div>
+
+        <!-- Toggle Switch -->
+        <div class="section">
+            <h2>Toggle Switch Custom Element</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px"><code>&lt;toggle-switch&gt;</code> — a custom
+                boolean toggle.</p>
+            <div class="flex gap-16 flex-wrap">
+                <div class="form-group">
+                    <label>Dark Mode</label>
+                    <toggle-switch id="toggle-darkmode" label="Dark Mode" checked="false"
+                        data-testid="toggle-darkmode"></toggle-switch>
+                </div>
+                <div class="form-group">
+                    <label>Notifications</label>
+                    <toggle-switch id="toggle-notif" label="Notifications" checked="true"
+                        data-testid="toggle-notif"></toggle-switch>
+                </div>
+                <div class="form-group">
+                    <label>Auto-save (disabled)</label>
+                    <toggle-switch id="toggle-autosave" label="Auto-save" checked="true" disabled
+                        data-testid="toggle-autosave"></toggle-switch>
+                </div>
+            </div>
+            <div id="toggle-log" class="output-box mt-8" style="min-height:40px"></div>
+        </div>
+
+        <!-- Tag Input -->
+        <div class="section">
+            <h2>Tag Input Custom Element</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px"><code>&lt;tag-input-element&gt;</code> — chip/tag
+                input for multiple values.</p>
+            <div class="form-group">
+                <label>Skills (press Enter or comma to add)</label>
+                <tag-input-element id="tag-skills" placeholder="Add skill…"
+                    data-testid="tag-skills"></tag-input-element>
+                <div class="form-hint">Tags: <span id="tag-skills-val">none</span></div>
+            </div>
+            <div class="form-group">
+                <label>Labels (preset values)</label>
+                <tag-input-element id="tag-labels" placeholder="Add label…" initial-tags="bug,feature,urgent"
+                    data-testid="tag-labels"></tag-input-element>
+            </div>
+        </div>
+
+        <!-- Color Swatch Picker -->
+        <div class="section">
+            <h2>Color Swatch Picker Custom Element</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px"><code>&lt;color-swatch&gt;</code> — custom color
+                selection widget.</p>
+            <color-swatch id="color-picker-1" data-testid="color-swatch-1"></color-swatch>
+            <div class="form-hint mt-8">Selected: <span id="color-swatch-val">None</span></div>
+        </div>
+
+        <!-- Countdown Timer -->
+        <div class="section">
+            <h2>Countdown Timer Custom Element</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px"><code>&lt;countdown-timer&gt;</code> — a
+                self-contained countdown widget.</p>
+            <countdown-timer id="timer-1" seconds="60" data-testid="countdown-timer-1"></countdown-timer>
+        </div>
+
+        <!-- Form with Custom Elements -->
+        <div class="section">
+            <h2>Form with Custom Elements</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">A product review form using custom web components
+                as form controls.</p>
+            <form id="custom-form" novalidate>
+                <div class="form-group">
+                    <label for="review-name">Your Name</label>
+                    <input type="text" id="review-name" name="name" required placeholder="John Doe"
+                        data-testid="review-name">
+                </div>
+                <div class="form-group">
+                    <label>Overall Rating <span style="color:var(--danger)">*</span></label>
+                    <star-rating id="review-rating" name="rating" value="0" max="5"
+                        data-testid="review-rating"></star-rating>
+                    <input type="hidden" id="review-rating-hidden" name="rating" value="0">
+                    <span class="form-error" id="err-review-rating" style="display:none">Please select a rating.</span>
+                </div>
+                <div class="form-group">
+                    <label>Tags</label>
+                    <tag-input-element id="review-tags" name="tags" placeholder="Add tags…"
+                        data-testid="review-tags"></tag-input-element>
+                </div>
+                <div class="form-group">
+                    <label for="review-text">Review Text</label>
+                    <textarea id="review-text" name="review" rows="4" placeholder="Write your review…"
+                        data-testid="review-text"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Recommend?</label>
+                    <toggle-switch id="review-recommend" name="recommend" label="I recommend this product"
+                        checked="false" data-testid="review-recommend"></toggle-switch>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary" id="custom-form-submit">Submit Review</button>
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+                <div id="custom-form-result" class="output-box mt-8" style="display:none"></div>
+            </form>
+        </div>
+
+        <!-- Non-standard Form -->
+        <div class="section">
+            <h2>Non-Standard Form (Custom Submit Logic)</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">A form that doesn't use a native
+                <code>&lt;form&gt;</code> element — common in React/Vue apps.
+            </p>
+            <div id="non-standard-form" role="form" aria-label="Non-standard form">
+                <div class="form-group">
+                    <label for="ns-email">Email</label>
+                    <input type="email" id="ns-email" placeholder="you@example.com" data-testid="ns-email">
+                </div>
+                <div class="form-group">
+                    <label for="ns-message">Message</label>
+                    <textarea id="ns-message" rows="3" placeholder="Your message…" data-testid="ns-message"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Priority</label>
+                    <div class="flex gap-8">
+                        <label><input type="radio" name="ns-priority" value="low" id="ns-low"
+                                data-testid="ns-priority-low"> Low</label>
+                        <label><input type="radio" name="ns-priority" value="medium" id="ns-medium" checked
+                                data-testid="ns-priority-medium"> Medium</label>
+                        <label><input type="radio" name="ns-priority" value="high" id="ns-high"
+                                data-testid="ns-priority-high"> High</label>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" id="ns-submit-btn" onclick="submitNonStandard()">Send
+                        Message</button>
+                    <button type="button" class="btn btn-secondary" onclick="clearNonStandard()">Clear</button>
+                </div>
+                <div id="ns-result" class="output-box mt-8" style="display:none"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+        // ===== Star Rating Web Component =====
+        class StarRating extends HTMLElement {
+            constructor() {
+                super();
+                this._value = 0;
+                this._max = 5;
+                this._readonly = false;
+            }
+            connectedCallback() {
+                this._value = parseInt(this.getAttribute('value') || 0);
+                this._max = parseInt(this.getAttribute('max') || 5);
+                this._readonly = this.hasAttribute('readonly');
+                this.render();
+            }
+            render() {
+                this.innerHTML = '';
+                for (let i = 1; i <= this._max; i++) {
+                    const star = document.createElement('span');
+                    star.textContent = i <= this._value ? '★' : '☆';
+                    star.style.color = i <= this._value ? '#f59e0b' : '#d1d5db';
+                    star.style.cursor = this._readonly ? 'default' : 'pointer';
+                    star.dataset.val = i;
+                    if (!this._readonly) {
+                        star.addEventListener('click', () => this.setValue(i));
+                        star.addEventListener('mouseenter', () => this.highlight(i));
+                        star.addEventListener('mouseleave', () => this.render());
+                    }
+                    this.appendChild(star);
+                }
+            }
+            highlight(n) {
+                [...this.children].forEach((s, i) => {
+                    s.textContent = i < n ? '★' : '☆';
+                    s.style.color = i < n ? '#f59e0b' : '#d1d5db';
+                });
+            }
+            setValue(n) {
+                this._value = n;
+                this.setAttribute('value', n);
+                this.render();
+                this.dispatchEvent(new CustomEvent('change', { detail: { value: n }, bubbles: true }));
+            }
+            get value() { return this._value; }
+        }
+        customElements.define('star-rating', StarRating);
+
+        // ===== Toggle Switch Web Component =====
+        class ToggleSwitch extends HTMLElement {
+            constructor() {
+                super();
+                this._checked = false;
+                this._disabled = false;
+            }
+            connectedCallback() {
+                this._checked = this.getAttribute('checked') === 'true';
+                this._disabled = this.hasAttribute('disabled');
+                this.render();
+            }
+            render() {
+                const label = this.getAttribute('label') || '';
+                this.innerHTML = `
+      <span style="font-size:14px">${label}</span>
+      <div class="ts-track" style="
+        width:44px;height:24px;border-radius:12px;
+        background:${this._checked ? 'var(--primary)' : '#d1d5db'};
+        position:relative;cursor:${this._disabled ? 'not-allowed' : 'pointer'};
+        transition:background 0.2s;opacity:${this._disabled ? '0.5' : '1'}
+      ">
+        <div style="
+          width:20px;height:20px;border-radius:50%;background:#fff;
+          position:absolute;top:2px;
+          left:${this._checked ? '22px' : '2px'};
+          transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.3)
+        "></div>
+      </div>`;
+                if (!this._disabled) {
+                    this.querySelector('.ts-track').addEventListener('click', () => {
+                        this._checked = !this._checked;
+                        this.setAttribute('checked', this._checked);
+                        this.render();
+                        this.dispatchEvent(new CustomEvent('change', { detail: { checked: this._checked }, bubbles: true }));
+                    });
+                }
+            }
+            get checked() { return this._checked; }
+        }
+        customElements.define('toggle-switch', ToggleSwitch);
+
+        // ===== Tag Input Web Component =====
+        class TagInputElement extends HTMLElement {
+            constructor() {
+                super();
+                this._tags = [];
+            }
+            connectedCallback() {
+                const initial = this.getAttribute('initial-tags');
+                if (initial) this._tags = initial.split(',').map(t => t.trim()).filter(Boolean);
+                this.render();
+            }
+            render() {
+                const placeholder = this.getAttribute('placeholder') || 'Add tag…';
+                this.innerHTML = `
+      <div style="display:flex;flex-wrap:wrap;gap:6px;padding:6px;border:1px solid var(--border);border-radius:var(--radius);min-height:40px;align-items:center;background:var(--surface)">
+        ${this._tags.map((t, i) => `
+          <span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:99px;font-size:12px;display:flex;align-items:center;gap:4px">
+            ${t}
+            <button type="button" data-idx="${i}" style="background:none;border:none;cursor:pointer;color:#1d4ed8;font-size:14px;line-height:1;padding:0">×</button>
+          </span>`).join('')}
+        <input type="text" placeholder="${placeholder}" style="border:none;outline:none;font-size:14px;flex:1;min-width:100px;padding:2px 4px">
+      </div>`;
+                this.querySelector('input').addEventListener('keydown', e => {
+                    if (e.key === 'Enter' || e.key === ',') {
+                        e.preventDefault();
+                        const val = e.target.value.trim().replace(/,$/, '');
+                        if (val && !this._tags.includes(val)) {
+                            this._tags.push(val);
+                            this.render();
+                            this.dispatchEvent(new CustomEvent('change', { detail: { tags: this._tags }, bubbles: true }));
+                        }
+                    } else if (e.key === 'Backspace' && !e.target.value && this._tags.length) {
+                        this._tags.pop();
+                        this.render();
+                    }
+                });
+                this.querySelectorAll('[data-idx]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this._tags.splice(parseInt(btn.dataset.idx), 1);
+                        this.render();
+                        this.dispatchEvent(new CustomEvent('change', { detail: { tags: this._tags }, bubbles: true }));
+                    });
+                });
+            }
+            get tags() { return this._tags; }
+        }
+        customElements.define('tag-input-element', TagInputElement);
+
+        // ===== Color Swatch Web Component =====
+        class ColorSwatch extends HTMLElement {
+            connectedCallback() {
+                const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#06b6d4', '#3b82f6', '#8b5cf6', '#ec4899', '#1e293b', '#ffffff'];
+                this._selected = null;
+                this.innerHTML = `<div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${colors.map(c => `<div data-color="${c}" style="width:32px;height:32px;border-radius:50%;background:${c};cursor:pointer;border:2px solid transparent;transition:transform 0.1s" title="${c}"></div>`).join('')}
+    </div>`;
+                this.querySelectorAll('[data-color]').forEach(el => {
+                    el.addEventListener('click', () => {
+                        this.querySelectorAll('[data-color]').forEach(e => e.style.border = '2px solid transparent');
+                        el.style.border = '2px solid var(--text)';
+                        el.style.transform = 'scale(1.2)';
+                        this._selected = el.dataset.color;
+                        document.getElementById('color-swatch-val').textContent = this._selected;
+                        this.dispatchEvent(new CustomEvent('change', { detail: { color: this._selected }, bubbles: true }));
+                    });
+                });
+            }
+        }
+        customElements.define('color-swatch', ColorSwatch);
+
+        // ===== Countdown Timer Web Component =====
+        class CountdownTimer extends HTMLElement {
+            connectedCallback() {
+                this._seconds = parseInt(this.getAttribute('seconds') || 60);
+                this._remaining = this._seconds;
+                this._running = false;
+                this.render();
+            }
+            render() {
+                const m = Math.floor(this._remaining / 60).toString().padStart(2, '0');
+                const s = (this._remaining % 60).toString().padStart(2, '0');
+                this.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-size:32px;font-family:monospace;font-weight:bold;color:${this._remaining <= 10 ? 'var(--danger)' : 'var(--text)'}">${m}:${s}</div>
+        <div class="btn-group" style="margin:0">
+          <button class="btn btn-primary btn-sm" id="ct-start">▶ Start</button>
+          <button class="btn btn-secondary btn-sm" id="ct-pause">⏸ Pause</button>
+          <button class="btn btn-danger btn-sm" id="ct-reset">↺ Reset</button>
+        </div>
+      </div>
+      <div class="progress-bar-wrap mt-8" style="max-width:300px">
+        <div class="progress-bar-fill" style="width:${(this._remaining / this._seconds) * 100}%"></div>
+      </div>`;
+                this.querySelector('#ct-start').addEventListener('click', () => this.start());
+                this.querySelector('#ct-pause').addEventListener('click', () => this.pause());
+                this.querySelector('#ct-reset').addEventListener('click', () => this.reset());
+            }
+            start() {
+                if (this._running || this._remaining <= 0) return;
+                this._running = true;
+                this._interval = setInterval(() => {
+                    this._remaining--;
+                    this.render();
+                    if (this._remaining <= 0) { clearInterval(this._interval); this._running = false; this.dispatchEvent(new CustomEvent('complete', { bubbles: true })); }
+                }, 1000);
+            }
+            pause() { clearInterval(this._interval); this._running = false; }
+            reset() { this.pause(); this._remaining = this._seconds; this.render(); }
+        }
+        customElements.define('countdown-timer', CountdownTimer);
+
+        // ===== Event listeners =====
+        document.getElementById('rating-1').addEventListener('change', e => {
+            document.getElementById('rating-1-val').textContent = e.detail.value + ' / 5';
+        });
+        document.getElementById('rating-3').addEventListener('change', e => {
+            document.getElementById('rating-3-val').textContent = e.detail.value + ' / 10';
+        });
+
+        document.querySelectorAll('toggle-switch').forEach(t => {
+            t.addEventListener('change', e => {
+                logToBox('toggle-log', `Toggle "${t.getAttribute('label')}" changed to: ${e.detail.checked}`, 'info');
+            });
+        });
+
+        document.getElementById('tag-skills').addEventListener('change', e => {
+            document.getElementById('tag-skills-val').textContent = e.detail.tags.join(', ') || 'none';
+        });
+
+        // Review rating sync
+        document.getElementById('review-rating').addEventListener('change', e => {
+            document.getElementById('review-rating-hidden').value = e.detail.value;
+        });
+
+        // Custom form submit
+        document.getElementById('custom-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const rating = parseInt(document.getElementById('review-rating-hidden').value);
+            if (!rating) {
+                document.getElementById('err-review-rating').style.display = 'block';
+                return;
+            }
+            document.getElementById('err-review-rating').style.display = 'none';
+            const data = {
+                name: document.getElementById('review-name').value,
+                rating,
+                tags: document.getElementById('review-tags').tags,
+                review: document.getElementById('review-text').value,
+                recommend: document.getElementById('review-recommend').checked
+            };
+            const res = document.getElementById('custom-form-result');
+            res.style.display = 'block';
+            res.textContent = JSON.stringify(data, null, 2);
+        });
+
+        // Non-standard form
+        function submitNonStandard() {
+            const data = {
+                email: document.getElementById('ns-email').value,
+                message: document.getElementById('ns-message').value,
+                priority: document.querySelector('input[name="ns-priority"]:checked')?.value
+            };
+            const res = document.getElementById('ns-result');
+            res.style.display = 'block';
+            res.textContent = JSON.stringify(data, null, 2);
+        }
+        function clearNonStandard() {
+            document.getElementById('ns-email').value = '';
+            document.getElementById('ns-message').value = '';
+            document.getElementById('ns-result').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

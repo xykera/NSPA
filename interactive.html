@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWO QA – Interactive</title>
+    <script src="vwo-loader.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .popover-host {
+            position: relative;
+            display: inline-block;
+        }
+
+        [popover] {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px;
+            box-shadow: var(--shadow);
+            z-index: 100;
+            min-width: 200px;
+            font-size: 13px;
+        }
+
+        .drag-list {
+            min-height: 60px;
+        }
+
+        .sticky-demo {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .sticky-header-inner {
+            position: sticky;
+            top: 0;
+            background: #1e293b;
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        .sticky-content {
+            padding: 12px;
+            font-size: 13px;
+        }
+
+        .infinite-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="site-nav">
+        <span class="nav-brand">🧪 VWO QA Site</span>
+        <a href="index.html" onclick="return preserveQueryParams(this)">Home</a>
+        <a href="forms.html" onclick="return preserveQueryParams(this)">Forms</a>
+        <a href="dynamic-forms.html" onclick="return preserveQueryParams(this)">Dynamic Forms</a>
+        <a href="custom-elements.html" onclick="return preserveQueryParams(this)">Custom Elements</a>
+        <a href="shadow-dom.html" onclick="return preserveQueryParams(this)">Shadow DOM</a>
+        <a href="canvas.html" onclick="return preserveQueryParams(this)">Canvas</a>
+        <a href="tables.html" onclick="return preserveQueryParams(this)">Tables</a>
+        <a href="media.html" onclick="return preserveQueryParams(this)">Media</a>
+        <a href="interactive.html" onclick="return preserveQueryParams(this)">Interactive</a>
+        <a href="dom-events.html" onclick="return preserveQueryParams(this)">DOM Events</a>
+        <a href="storage.html" onclick="return preserveQueryParams(this)">Storage</a>
+        <a href="ajax.html" onclick="return preserveQueryParams(this)">AJAX</a>
+        <a href="accessibility.html" onclick="return preserveQueryParams(this)">Accessibility</a>
+    </nav>
+
+    <div class="page-header">
+        <h1>Interactive Elements</h1>
+        <p>Modals, tooltips, tabs, accordion, drag-and-drop, infinite scroll, popover, and more.</p>
+    </div>
+
+    <main class="content">
+
+        <!-- Modals -->
+        <div class="section">
+            <h2>Modals</h2>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="open-modal-basic" onclick="openModal('modal-basic')">Open Basic
+                    Modal</button>
+                <button class="btn btn-success" id="open-modal-form" onclick="openModal('modal-form')">Open Form
+                    Modal</button>
+                <button class="btn btn-warning" id="open-modal-confirm" onclick="openModal('modal-confirm')">Open
+                    Confirm Modal</button>
+                <button class="btn btn-secondary" id="open-native-dialog"
+                    onclick="document.getElementById('native-dialog').showModal()">Open Native &lt;dialog&gt;</button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="section">
+            <h2>Tab Panels</h2>
+            <div class="tab-container" id="tabs-main" data-testid="tabs-main">
+                <div class="tab-list" role="tablist">
+                    <button class="tab-btn active" role="tab" aria-selected="true" id="tab-overview"
+                        data-testid="tab-overview">Overview</button>
+                    <button class="tab-btn" role="tab" aria-selected="false" id="tab-features"
+                        data-testid="tab-features">Features</button>
+                    <button class="tab-btn" role="tab" aria-selected="false" id="tab-pricing"
+                        data-testid="tab-pricing">Pricing</button>
+                    <button class="tab-btn" role="tab" aria-selected="false" id="tab-faq"
+                        data-testid="tab-faq">FAQ</button>
+                </div>
+                <div class="tab-panel active" id="panel-overview" role="tabpanel">
+                    <p style="font-size:14px">Welcome to the <strong>Overview</strong> tab. This is the default active
+                        tab. VWO helps you optimize your website through A/B testing, heatmaps, and session recordings.
+                    </p>
+                </div>
+                <div class="tab-panel" id="panel-features" role="tabpanel">
+                    <ul style="font-size:14px;margin-left:20px">
+                        <li>A/B Testing</li>
+                        <li>Multivariate Testing</li>
+                        <li>Heatmaps</li>
+                        <li>Session Recordings</li>
+                        <li>Funnel Analysis</li>
+                        <li>Form Analytics</li>
+                    </ul>
+                </div>
+                <div class="tab-panel" id="panel-pricing" role="tabpanel">
+                    <div class="grid-3">
+                        <div class="card">
+                            <h3>Free</h3>
+                            <p>$0/mo — Up to 10k visitors</p>
+                        </div>
+                        <div class="card">
+                            <h3>Growth</h3>
+                            <p>$49/mo — Up to 100k visitors</p>
+                        </div>
+                        <div class="card">
+                            <h3>Enterprise</h3>
+                            <p>Custom pricing</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-panel" id="panel-faq" role="tabpanel">
+                    <details>
+                        <summary>What is VWO?</summary>
+                        <div class="details-body">VWO is a website optimization platform.</div>
+                    </details>
+                    <details>
+                        <summary>How does A/B testing work?</summary>
+                        <div class="details-body">You create two variants and split traffic between them.</div>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accordion -->
+        <div class="section">
+            <h2>Accordion (details/summary)</h2>
+            <details id="acc-1" data-testid="accordion-1">
+                <summary>What is A/B Testing?</summary>
+                <div class="details-body">A/B testing is a method of comparing two versions of a webpage to determine
+                    which one performs better. You split traffic between variant A and variant B and measure conversion
+                    rates.</div>
+            </details>
+            <details id="acc-2" data-testid="accordion-2">
+                <summary>What are Heatmaps?</summary>
+                <div class="details-body">Heatmaps visually represent where users click, move, and scroll on your
+                    website. They help identify areas of high and low engagement.</div>
+            </details>
+            <details id="acc-3" data-testid="accordion-3">
+                <summary>What is Session Recording?</summary>
+                <div class="details-body">Session recordings capture real user interactions on your website, including
+                    mouse movements, clicks, and scrolling behavior.</div>
+            </details>
+            <details id="acc-4" open data-testid="accordion-4">
+                <summary>How do I get started? (pre-opened)</summary>
+                <div class="details-body">Sign up for a free account, install the VWO SmartCode on your website, and
+                    create your first test in minutes.</div>
+            </details>
+        </div>
+
+        <!-- Tooltips -->
+        <div class="section">
+            <h2>Tooltips</h2>
+            <div class="flex gap-16 flex-wrap items-center">
+                <div class="tooltip-wrap">
+                    <button class="btn btn-primary" id="tooltip-btn-1" data-testid="tooltip-1">Hover for
+                        Tooltip</button>
+                    <span class="tooltip-text">This is a CSS tooltip!</span>
+                </div>
+                <div class="tooltip-wrap">
+                    <span id="tooltip-span-1" style="text-decoration:underline dotted;cursor:help;font-size:14px"
+                        data-testid="tooltip-2">What is VWO?</span>
+                    <span class="tooltip-text">Visual Website Optimizer — a CRO platform</span>
+                </div>
+                <div class="tooltip-wrap">
+                    <button class="btn btn-secondary" id="tooltip-btn-2" data-testid="tooltip-3"
+                        title="Native browser tooltip via title attribute">Native title tooltip</button>
+                    <span class="tooltip-text">Custom tooltip (overrides title)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drag and Drop -->
+        <div class="section">
+            <h2>Drag and Drop</h2>
+            <div class="grid-2">
+                <div>
+                    <h3>Reorderable List</h3>
+                    <div id="drag-list" class="drag-list" data-testid="drag-list">
+                        <div class="draggable-item" draggable="true" data-id="1" id="drag-item-1">☰ Item 1 – Analytics
+                        </div>
+                        <div class="draggable-item" draggable="true" data-id="2" id="drag-item-2">☰ Item 2 – Heatmaps
+                        </div>
+                        <div class="draggable-item" draggable="true" data-id="3" id="drag-item-3">☰ Item 3 – Recordings
+                        </div>
+                        <div class="draggable-item" draggable="true" data-id="4" id="drag-item-4">☰ Item 4 – A/B Tests
+                        </div>
+                        <div class="draggable-item" draggable="true" data-id="5" id="drag-item-5">☰ Item 5 – Funnels
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3>Drop Zone</h3>
+                    <div class="drop-zone" id="drop-zone-1" data-testid="drop-zone">
+                        <p>Drop files or items here</p>
+                    </div>
+                    <div id="drop-log" class="output-box mt-8" style="min-height:40px"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slider / Range -->
+        <div class="section">
+            <h2>Interactive Sliders</h2>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Price Range: $<span id="price-min-val">0</span> – $<span
+                            id="price-max-val">1000</span></label>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <span style="font-size:12px">$0</span>
+                        <input type="range" id="price-min" min="0" max="1000" value="0" step="10" style="flex:1"
+                            data-testid="price-min">
+                        <input type="range" id="price-max" min="0" max="1000" value="1000" step="10" style="flex:1"
+                            data-testid="price-max">
+                        <span style="font-size:12px">$1000</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Opacity: <span id="opacity-val">100</span>%</label>
+                    <input type="range" id="opacity-slider" min="0" max="100" value="100" data-testid="opacity-slider">
+                    <div id="opacity-demo"
+                        style="width:100%;height:40px;background:var(--primary);border-radius:var(--radius);margin-top:8px;transition:opacity 0.1s">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popover -->
+        <div class="section">
+            <h2>Popover (native API + custom)</h2>
+            <div class="flex gap-16 flex-wrap items-center">
+                <div class="popover-host">
+                    <button class="btn btn-primary" id="popover-btn-1" onclick="togglePopover('pop-1')"
+                        data-testid="popover-btn-1">Open Popover ▼</button>
+                    <div id="pop-1"
+                        style="display:none;position:absolute;top:110%;left:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:0 4px 16px rgba(0,0,0,0.15);z-index:200;min-width:220px">
+                        <strong style="font-size:14px">Popover Content</strong>
+                        <p style="font-size:13px;margin-top:6px;color:var(--text-muted)">This is a custom popover with
+                            additional information.</p>
+                        <button class="btn btn-primary btn-sm mt-8" onclick="togglePopover('pop-1')">Close</button>
+                    </div>
+                </div>
+                <div class="popover-host">
+                    <button class="btn btn-secondary" id="popover-btn-2" onclick="togglePopover('pop-2')"
+                        data-testid="popover-btn-2">User Info ▼</button>
+                    <div id="pop-2"
+                        style="display:none;position:absolute;top:110%;left:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:0 4px 16px rgba(0,0,0,0.15);z-index:200;min-width:240px">
+                        <div style="display:flex;gap:10px;align-items:center">
+                            <div
+                                style="width:40px;height:40px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold">
+                                JD</div>
+                            <div><strong style="font-size:14px">John Doe</strong><br><span
+                                    style="font-size:12px;color:var(--text-muted)">john@example.com</span></div>
+                        </div>
+                        <hr class="divider">
+                        <a href="#" style="display:block;font-size:13px;padding:4px 0">Profile Settings</a>
+                        <a href="#" style="display:block;font-size:13px;padding:4px 0">Billing</a>
+                        <a href="#" style="display:block;font-size:13px;padding:4px 0;color:var(--danger)">Sign Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Infinite Scroll -->
+        <div class="section">
+            <h2>Infinite Scroll Simulation</h2>
+            <div id="infinite-container"
+                style="height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius)"
+                data-testid="infinite-scroll">
+                <div id="infinite-list"></div>
+                <div id="infinite-loader" style="text-align:center;padding:12px;font-size:13px;color:var(--text-muted)">
+                    Loading…</div>
+            </div>
+            <div id="infinite-status" class="form-hint mt-8"></div>
+        </div>
+
+        <!-- Sticky Elements -->
+        <div class="section">
+            <h2>Sticky Header</h2>
+            <div class="sticky-demo" id="sticky-demo" data-testid="sticky-demo">
+                <div class="sticky-header-inner">📌 Sticky Header (scroll inside this box)</div>
+                <div class="sticky-content">
+                    <p>Item 1 — Lorem ipsum dolor sit amet consectetur.</p>
+                    <p>Item 2 — Adipiscing elit sed do eiusmod tempor.</p>
+                    <p>Item 3 — Incididunt ut labore et dolore magna.</p>
+                    <p>Item 4 — Aliqua ut enim ad minim veniam.</p>
+                    <p>Item 5 — Quis nostrud exercitation ullamco.</p>
+                    <p>Item 6 — Laboris nisi ut aliquip ex ea commodo.</p>
+                    <p>Item 7 — Consequat duis aute irure dolor.</p>
+                    <p>Item 8 — In reprehenderit in voluptate velit.</p>
+                    <p>Item 9 — Esse cillum dolore eu fugiat nulla.</p>
+                    <p>Item 10 — Pariatur excepteur sint occaecat.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Context Menu -->
+        <div class="section">
+            <h2>Custom Context Menu (Right-click)</h2>
+            <div id="context-target"
+                style="background:var(--bg);border:2px dashed var(--border);border-radius:var(--radius);padding:24px;text-align:center;font-size:14px;color:var(--text-muted);cursor:context-menu"
+                data-testid="context-target">
+                Right-click here to open custom context menu
+            </div>
+            <div id="context-menu"
+                style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 4px 16px rgba(0,0,0,0.15);z-index:9999;min-width:160px;overflow:hidden">
+                <div class="ctx-item" onclick="ctxAction('copy')" style="padding:8px 14px;font-size:13px;cursor:pointer"
+                    data-testid="ctx-copy">📋 Copy</div>
+                <div class="ctx-item" onclick="ctxAction('paste')"
+                    style="padding:8px 14px;font-size:13px;cursor:pointer" data-testid="ctx-paste">📌 Paste</div>
+                <div class="ctx-item" onclick="ctxAction('inspect')"
+                    style="padding:8px 14px;font-size:13px;cursor:pointer" data-testid="ctx-inspect">🔍 Inspect</div>
+                <hr style="margin:4px 0;border:none;border-top:1px solid var(--border)">
+                <div class="ctx-item" onclick="ctxAction('delete')"
+                    style="padding:8px 14px;font-size:13px;cursor:pointer;color:var(--danger)" data-testid="ctx-delete">
+                    🗑️ Delete</div>
+            </div>
+            <div id="ctx-log" class="output-box mt-8" style="min-height:30px"></div>
+        </div>
+
+        <!-- SPA pushState Navigation -->
+        <div class="section" id="spa-section">
+            <h2>SPA Navigation (pushState)</h2>
+            <p class="text-sm text-muted" style="margin-bottom:12px">
+                Simulates a Single-Page App route change using
+                <code>history.pushState</code> — the URL changes without a full page reload.
+                Tests VWO's ability to detect and track virtual page views in SPAs.
+            </p>
+
+            <!-- Normal view -->
+            <div id="spa-normal-view">
+                <div class="output-box" style="margin-bottom:14px;font-size:13px">
+                    <strong>Current URL:</strong> <span id="spa-url-display" style="font-family:monospace"></span>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="spa-navigate-btn" onclick="navigateToSPA()">
+                        🚀 Navigate to SPA Route
+                    </button>
+                </div>
+            </div>
+
+            <!-- SPA virtual page view -->
+            <div id="spa-route-view" style="display:none">
+                <div class="alert alert-success" style="margin-bottom:14px">
+                    ✅ You are now on the SPA route! URL changed via <code>pushState</code> — no page reload occurred.
+                </div>
+                <div class="output-box" style="margin-bottom:14px;font-size:13px">
+                    <strong>Current URL:</strong> <span id="spa-url-display-2" style="font-family:monospace"></span>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" id="spa-back-btn" onclick="history.back()">
+                        ← Go Back
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modal-basic">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Basic Modal</h3>
+                <button class="modal-close" onclick="closeModal('modal-basic')"
+                    data-testid="modal-close-basic">✕</button>
+            </div>
+            <p style="font-size:14px">This is a basic modal dialog. It can contain any content.</p>
+            <div class="btn-group mt-16">
+                <button class="btn btn-primary" onclick="closeModal('modal-basic')"
+                    data-testid="modal-confirm-basic">OK</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-basic')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-form">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Form Modal</h3>
+                <button class="modal-close" onclick="closeModal('modal-form')">✕</button>
+            </div>
+            <form id="modal-inner-form">
+                <div class="form-group">
+                    <label for="modal-name">Name</label>
+                    <input type="text" id="modal-name" placeholder="Your name" data-testid="modal-form-name">
+                </div>
+                <div class="form-group">
+                    <label for="modal-email">Email</label>
+                    <input type="email" id="modal-email" placeholder="email@example.com" data-testid="modal-form-email">
+                </div>
+            </form>
+            <div class="btn-group mt-16">
+                <button class="btn btn-primary" onclick="submitModalForm()"
+                    data-testid="modal-form-submit">Submit</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-form')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-confirm">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>⚠️ Confirm Action</h3>
+                <button class="modal-close" onclick="closeModal('modal-confirm')">✕</button>
+            </div>
+            <p style="font-size:14px">Are you sure you want to delete this item? This action cannot be undone.</p>
+            <div class="btn-group mt-16">
+                <button class="btn btn-danger" onclick="confirmDelete()" data-testid="modal-confirm-yes">Yes,
+                    Delete</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-confirm')"
+                    data-testid="modal-confirm-no">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <dialog id="native-dialog"
+        style="border:none;border-radius:8px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-width:400px"
+        data-testid="native-dialog">
+        <h3 style="margin-bottom:12px">Native &lt;dialog&gt; Element</h3>
+        <p style="font-size:14px;margin-bottom:16px">This uses the native HTML <code>&lt;dialog&gt;</code> element with
+            <code>showModal()</code>.
+        </p>
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="document.getElementById('native-dialog').close()"
+                data-testid="native-dialog-close">Close</button>
+        </div>
+    </dialog>
+
+    <script src="main.js"></script>
+    <script>
+        // Tabs
+        initTabs();
+
+        // Drag and Drop (reorderable list)
+        let dragSrc = null;
+        document.querySelectorAll('.draggable-item').forEach(item => {
+            item.addEventListener('dragstart', function (e) { dragSrc = this; this.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+            item.addEventListener('dragend', function () { this.classList.remove('dragging'); });
+            item.addEventListener('dragover', function (e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+            item.addEventListener('drop', function (e) {
+                e.preventDefault();
+                if (dragSrc !== this) {
+                    const list = document.getElementById('drag-list');
+                    const items = [...list.children];
+                    const srcIdx = items.indexOf(dragSrc), tgtIdx = items.indexOf(this);
+                    if (srcIdx < tgtIdx) list.insertBefore(dragSrc, this.nextSibling);
+                    else list.insertBefore(dragSrc, this);
+                }
+            });
+        });
+
+        // Drop zone
+        const dropZone = document.getElementById('drop-zone-1');
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault(); dropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                logToBox('drop-log', `Dropped ${files.length} file(s): ${[...files].map(f => f.name).join(', ')}`, 'success');
+            } else {
+                const text = e.dataTransfer.getData('text/plain') || 'dragged item';
+                logToBox('drop-log', `Dropped: ${text}`, 'info');
+            }
+        });
+
+        // Sliders
+        document.getElementById('price-min').addEventListener('input', function () {
+            document.getElementById('price-min-val').textContent = this.value;
+        });
+        document.getElementById('price-max').addEventListener('input', function () {
+            document.getElementById('price-max-val').textContent = this.value;
+        });
+        document.getElementById('opacity-slider').addEventListener('input', function () {
+            document.getElementById('opacity-val').textContent = this.value;
+            document.getElementById('opacity-demo').style.opacity = this.value / 100;
+        });
+
+        // Popover
+        function togglePopover(id) {
+            const el = document.getElementById(id);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+        document.addEventListener('click', e => {
+            ['pop-1', 'pop-2'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el.parentElement.contains(e.target)) el.style.display = 'none';
+            });
+        });
+
+        // Infinite scroll
+        let infiniteCount = 0;
+        function loadMoreItems() {
+            const list = document.getElementById('infinite-list');
+            for (let i = 0; i < 10; i++) {
+                infiniteCount++;
+                const item = document.createElement('div');
+                item.className = 'infinite-item';
+                item.id = 'infinite-item-' + infiniteCount;
+                item.dataset.testid = 'infinite-item-' + infiniteCount;
+                item.textContent = `Item #${infiniteCount} — Loaded dynamically via IntersectionObserver`;
+                list.appendChild(item);
+            }
+            document.getElementById('infinite-status').textContent = `${infiniteCount} items loaded`;
+            if (infiniteCount >= 100) {
+                document.getElementById('infinite-loader').textContent = 'All items loaded.';
+                observer.disconnect();
+            }
+        }
+
+        const observer = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) loadMoreItems();
+        }, { root: document.getElementById('infinite-container'), threshold: 0.1 });
+        observer.observe(document.getElementById('infinite-loader'));
+        loadMoreItems();
+
+        // Context menu
+        document.getElementById('context-target').addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            const menu = document.getElementById('context-menu');
+            menu.style.display = 'block';
+            menu.style.left = e.clientX + 'px';
+            menu.style.top = e.clientY + 'px';
+        });
+        document.addEventListener('click', () => document.getElementById('context-menu').style.display = 'none');
+        document.querySelectorAll('.ctx-item').forEach(item => {
+            item.addEventListener('mouseenter', function () { this.style.background = 'var(--bg)'; });
+            item.addEventListener('mouseleave', function () { this.style.background = ''; });
+        });
+        function ctxAction(action) {
+            logToBox('ctx-log', 'Context menu action: ' + action, 'info');
+            document.getElementById('context-menu').style.display = 'none';
+        }
+
+        // Modal actions
+        function submitModalForm() {
+            const name = document.getElementById('modal-name').value;
+            const email = document.getElementById('modal-email').value;
+            alert(`Form submitted!\nName: ${name}\nEmail: ${email}`);
+            closeModal('modal-form');
+        }
+        function confirmDelete() {
+            alert('Item deleted! (Demo)');
+            closeModal('modal-confirm');
+        }
+
+        // Close modal on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function (e) {
+                if (e.target === this) this.classList.remove('open');
+            });
+        });
+        // SPA Navigation
+        function getCurrentUrl() {
+            return window.location.pathname + window.location.search;
+        }
+
+        function updateUrlDisplays() {
+            var url = getCurrentUrl();
+            var d1 = document.getElementById('spa-url-display');
+            var d2 = document.getElementById('spa-url-display-2');
+            if (d1) d1.textContent = url;
+            if (d2) d2.textContent = url;
+        }
+
+        function navigateToSPA() {
+            var currentSearch = window.location.search;
+            var spaPath = '/spa-nav' + (currentSearch || '');
+            window.history.pushState({ page: 'spa' }, 'SPA Route – VWO QA Site', spaPath);
+            document.getElementById('spa-normal-view').style.display = 'none';
+            document.getElementById('spa-route-view').style.display = 'block';
+            updateUrlDisplays();
+            console.log('[SPA] pushState →', spaPath);
+        }
+
+        function goBackToInteractive() {
+            document.getElementById('spa-route-view').style.display = 'none';
+            document.getElementById('spa-normal-view').style.display = 'block';
+            updateUrlDisplays();
+        }
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function (event) {
+            if (window.location.pathname.includes('spa-nav')) {
+                navigateToSPA();
+            } else {
+                goBackToInteractive();
+            }
+        });
+
+        // Init URL display on load
+        updateUrlDisplays();
+    </script>
+</body>
+
+</html>
