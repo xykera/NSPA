@@ -75,7 +75,7 @@ function preserveQueryParams(link) {
     // Only intercept when there are params to preserve
     if (id || isSync) {
         const href = link.getAttribute('href');
-        const newUrl = new URL(href, window.location.origin);
+        const newUrl = new URL(href, window.location.href);
 
         if (id) newUrl.searchParams.set('id', id);
         if (isSync) newUrl.searchParams.set('sync', '');
